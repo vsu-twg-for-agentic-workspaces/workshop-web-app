@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Workshop</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#17321A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="is-loading">
+  <div class="page-loader" id="page-loader" role="status" aria-live="polite">
+    <svg class="spinner" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">
+      <circle class="spinner-track" cx="24" cy="24" r="20"/>
+      <circle class="spinner-arc" cx="24" cy="24" r="20"/>
+    </svg>
+    <p>Loading…</p>
+  </div>
+  <noscript><style>.is-loading .page-loader { display: none; } .is-loading .page-content { visibility: visible; opacity: 1; }</style></noscript>
+  <div class="page-content">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="inner">
+      <img class="brand-logo" src="assets/img/vsu-brand-logo-horizontal.png" alt="Visayas State University" width="160" height="52">
+    </div>
+  </header>
+
+  <section class="event-band" aria-labelledby="event-title">
+    <div class="inner">
+      <h1 id="event-title"></h1>
+      <p class="meta"><span id="event-dates"></span><span id="event-hours"></span><span id="event-venue"></span></p>
+    </div>
+  </section>
+
+  <main id="main">
+    <div class="notice notice-info" id="demo-banner" hidden>
+      <p><strong>Preview mode.</strong> This page is not connected to the workshop system yet, so nothing you enter is saved.</p>
+    </div>
+
+    <div class="notice notice-test" id="env-banner" role="note" hidden>
+      <p><strong>Test environment.</strong> Answers go to the test Sheet, not the real participant list.</p>
+    </div>
+    <div class="notice notice-error" id="page-error" role="alert" hidden><p></p></div>
+
+    <div class="card" data-needs-event>
+      <h2>Welcome</h2>
+      <p>Use the links below. Your answers go only to the three workshop facilitators.</p>
+      <ul class="link-list">
+        <li><a class="btn btn-primary btn-block" href="register.html" data-keep-event>Register for the workshop</a></li>
+        <li><a class="btn btn-secondary btn-block" href="evaluate.html" data-keep-event>Workshop evaluation (Day 2)</a></li>
+        <li><a class="btn btn-secondary btn-block" href="certificate.html" data-keep-event>Check my certificate</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <img src="assets/img/vsu-twg-logo.svg" alt="" width="40" height="40">
+      <p>Organized by the TWG for Agentic Workspaces, Visayas State University. For workshop use only.</p>
+    </div>
+  </footer>
+
+  </div>
+  <noscript><p class="notice notice-error">Please turn on JavaScript to use this page, or ask a facilitator for a printed form.</p></noscript>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script>window.WorkshopPage.loadEvent();</script>
+</body>
+</html>

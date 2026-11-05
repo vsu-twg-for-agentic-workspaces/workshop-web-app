@@ -1,0 +1,290 @@
+/*
+ * styles.css — VSU Brand Book aligned (colors and type from the workshop repo's
+ * templates/master-template.css). Mobile-first: participants mostly use phones.
+ *
+ * Brand rules applied here:
+ * - VSU Brand Logo + Text Logo: upper left, unaltered (no filters, shadows, stretching)
+ * - Montserrat (Semibold) for titles, Roboto for body text; bold and italics sparingly
+ * - Gold and yellow are fills and accents, never text on white
+ */
+
+:root {
+  --vsu-green-dark: #17321A;
+  --vsu-green: #146939;
+  --vsu-green-light: #00954F;
+  --vsu-gold: #FDC530;
+  --vsu-gold-light: #FCD83D;
+  --vsu-gold-subtle: #FEF3C7;
+
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --bg-page: #FFFFFF;
+  --bg-surface: #F8FAFC;
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --error: #B91C1C;
+  --error-bg: #FEF2F2;
+  --error-border: #FCA5A5;
+  --success-bg: #F0FDF4;
+  --success-border: #86C9A2;
+  --info-bg: #FEF9E7;
+  --info-border: #E9C46A;
+
+  --font-heading: 'Montserrat', Arial, sans-serif;
+  --font-body: 'Roboto', Arial, sans-serif;
+
+  --radius: 10px;
+  --tap: 48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--vsu-green-dark);
+  margin: 0 0 0.5rem;
+}
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.0625rem; }
+
+p { margin: 0 0 1rem; }
+a { color: var(--vsu-green); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:not(.btn):not(.skip-link):hover { color: var(--vsu-green-dark); text-decoration-thickness: 2px; }
+.skip-link:hover { color: #fff; }
+
+::selection { background: #CDE8D6; color: var(--vsu-green-dark); }
+input, select { caret-color: var(--vsu-green); }
+
+/* Focus: dark green on light surfaces (≥3:1), gold on the dark green band. */
+:focus-visible {
+  outline: 3px solid var(--vsu-green-dark);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.event-band :focus-visible, .skip-link:focus-visible { outline-color: var(--vsu-gold); }
+/* Containers and headings focused by script (for screen readers) need no ring. */
+[tabindex="-1"]:focus { outline: none; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--vsu-green-dark); color: #fff; padding: 0.75rem 1rem; z-index: 10;
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+/* ---------- Header: brand logo at the position of primacy ---------- */
+.site-header {
+  background: var(--bg-page);
+  border-bottom: 4px solid var(--vsu-green);
+}
+.site-header .inner {
+  max-width: 44rem; margin: 0 auto; padding: 0.75rem 1rem;
+  display: flex; align-items: center;
+}
+.brand-logo { display: block; height: 44px; width: auto; }
+
+.event-band {
+  background: var(--vsu-green-dark);
+  color: #fff;
+  border-bottom: 4px solid var(--vsu-gold);
+}
+.event-band .inner { max-width: 44rem; margin: 0 auto; padding: 1.5rem 1rem 1.375rem; }
+.event-band h1 { color: #fff; font-size: 1.375rem; text-wrap: balance; letter-spacing: -0.01em; }
+.event-band .meta { margin: 0.625rem 0 0; color: #DCE7DF; font-size: 0.9375rem; }
+.event-band .meta span { display: block; }
+
+/* ---------- Main ---------- */
+main { max-width: 44rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+.lead { font-size: 1.0625rem; color: var(--text-secondary); margin-bottom: 1.25rem; }
+
+.card {
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(23, 50, 26, 0.06), 0 4px 12px -6px rgba(23, 50, 26, 0.10);
+}
+.card > h2:first-child { margin-bottom: 0.75rem; }
+
+.steps {
+  display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0 0 1rem;
+  font-size: 0.875rem; color: var(--text-secondary);
+}
+.steps li { flex: 1; text-align: center; padding-top: 0.5rem; border-top: 4px solid var(--border-light); }
+.steps li { transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+.steps li[aria-current="step"] { border-top-color: var(--vsu-green); color: var(--vsu-green-dark); font-weight: 500; }
+.steps li.done { border-top-color: var(--vsu-green-light); }
+
+/* ---------- Form ---------- */
+.field { margin-bottom: 1.25rem; }
+.field > label, fieldset legend {
+  display: block; font-weight: 500; margin-bottom: 0.375rem; color: var(--text-primary);
+}
+.hint { display: block; font-size: 0.875rem; color: var(--text-secondary); margin: -0.125rem 0 0.375rem; }
+
+input[type="text"], input[type="email"], select, textarea {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0.625rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+}
+textarea { resize: vertical; line-height: 1.5; }
+input[type="text"]:hover, input[type="email"]:hover, select:hover, textarea:hover { border-color: #94A3B8; }
+input:focus, select:focus, textarea:focus { border-color: var(--vsu-green); }
+.optional { font-weight: 400; color: var(--text-secondary); }
+
+/* 1–5 rating: five large, equal buttons in one row (a real radio group underneath). */
+.rating { margin-bottom: 1.25rem; }
+.rating legend { margin-bottom: 0.5rem; }
+.scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+.scale label { position: relative; display: block; cursor: pointer; }
+.scale input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.scale span {
+  display: flex; align-items: center; justify-content: center;
+  min-height: var(--tap);
+  font-family: var(--font-heading); font-weight: 600; font-size: 1.0625rem;
+  color: var(--vsu-green-dark); background: #fff;
+  border: 1px solid var(--border-medium); border-radius: 8px;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+}
+.scale label:hover span { border-color: var(--vsu-green-light); }
+.scale input:checked + span { background: var(--vsu-green); border-color: var(--vsu-green); color: #fff; }
+.scale input:focus-visible + span { outline: 3px solid var(--vsu-green-dark); outline-offset: 2px; }
+.scale input[aria-invalid="true"] + span { border-color: var(--error); }
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23146939' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  padding-right: 2.5rem;
+}
+
+fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
+.choice {
+  display: flex; align-items: center; gap: 0.75rem;
+  min-height: var(--tap); padding: 0.5rem 0.75rem; margin-bottom: 0.5rem;
+  border: 1px solid var(--border-medium); border-radius: 8px; background: #fff; cursor: pointer;
+}
+.choice { font-weight: 400; transition: border-color 150ms ease-out, background-color 150ms ease-out; }
+.choice:hover { border-color: var(--vsu-green-light); }
+.choice:has(input:checked) { border-color: var(--vsu-green); background: var(--success-bg); }
+.choice:has(input:focus-visible) { outline: 3px solid var(--vsu-green-dark); outline-offset: 2px; }
+.choice input:focus-visible { outline: none; }
+.choice input { width: 1.25rem; height: 1.25rem; accent-color: var(--vsu-green); flex: none; }
+
+.field-error { display: block; color: var(--error); font-size: 0.875rem; margin-top: 0.375rem; }
+.field-error:empty { display: none; }
+[aria-invalid="true"] { border-color: var(--error) !important; }
+
+.privacy { margin: 0 0 1.25rem; padding-top: 0.25rem; border-top: 1px solid var(--border-light); }
+.privacy h3 { margin: 1.25rem 0 0.375rem; font-size: 1rem; }
+.privacy p, .privacy li { color: var(--text-primary); }
+.privacy ul { padding-left: 1.25rem; margin: 0 0 0.75rem; }
+.privacy li + li { margin-top: 0.25rem; }
+.privacy .notice { margin-top: 1rem; }
+
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---------- Buttons ---------- */
+.actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--tap); padding: 0.625rem 1.25rem;
+  font-family: var(--font-heading); font-weight: 600; font-size: 1rem;
+  border-radius: 8px; border: 2px solid var(--vsu-green); cursor: pointer; text-decoration: none;
+}
+.btn-primary { background: var(--vsu-green); color: #fff; }
+.btn { transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out; }
+.btn-primary:hover { background: var(--vsu-green-dark); border-color: var(--vsu-green-dark); color: #fff; }
+.btn-primary:active { transform: translateY(1px); }
+.btn-secondary { background: #fff; color: var(--vsu-green); }
+.btn-secondary:hover { background: var(--success-bg); color: var(--vsu-green-dark); }
+.btn[disabled] { opacity: 0.65; cursor: progress; }
+.btn-block { width: 100%; }
+
+/* ---------- Messages ---------- */
+.notice { padding: 0.875rem 1rem; border-radius: 8px; border: 1px solid; margin-bottom: 1rem; }
+.notice p:last-child { margin-bottom: 0; }
+.notice-error { background: var(--error-bg); border-color: var(--error-border); }
+.notice-error strong { color: var(--error); }
+.notice-success { background: var(--success-bg); border-color: var(--success-border); }
+.notice-info { background: var(--info-bg); border-color: var(--info-border); }
+.notice-test { background: #EEF2FA; border-color: #9AAED3; }
+.notice-test strong { color: #123F8C; }
+
+.card-success { text-align: left; }
+.done-icon { display: block; margin-bottom: 0.75rem; fill: var(--success-bg); stroke: var(--vsu-green); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.notice ul { margin: 0.25rem 0 0; padding-left: 1.25rem; }
+
+.link-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+
+/* ---------- Footer ---------- */
+.site-footer { border-top: 1px solid var(--border-light); background: var(--bg-page); }
+.site-footer .inner {
+  max-width: 44rem; margin: 0 auto; padding: 1rem;
+  display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; color: var(--text-secondary);
+}
+.site-footer img { width: 40px; height: 40px; flex: none; }
+.site-footer p { margin: 0; }
+
+[hidden] { display: none !important; }
+
+/* ---------- Full-page loader (shown until the workshop details arrive) ---------- */
+.page-loader {
+  position: fixed; inset: 0; z-index: 20;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+  background: var(--bg-surface);
+  color: var(--text-secondary); font-size: 0.9375rem;
+  opacity: 0; visibility: hidden;
+  transition: opacity 250ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 250ms;
+}
+.page-loader p { margin: 0; }
+.is-loading .page-loader { opacity: 1; visibility: visible; transition: none; }
+
+.page-content { transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1); }
+.is-loading .page-content { visibility: hidden; opacity: 0; }
+
+.spinner { display: block; }
+.spinner circle { fill: none; stroke-width: 4; }
+.spinner-track { stroke: var(--border-light); }
+.spinner-arc {
+  stroke: var(--vsu-green);
+  stroke-linecap: round;
+  stroke-dasharray: 90 126; /* about 70% of the circle */
+  transform-origin: 24px 24px;
+  animation: spin 900ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (min-width: 40rem) {
+  h1 { font-size: 1.75rem; }
+  .event-band h1 { font-size: 1.625rem; }
+  .event-band .meta span { display: inline; }
+  .event-band .meta span:not([hidden]) ~ span:not([hidden])::before { content: " · "; }
+  .brand-logo { height: 52px; }
+  .card { padding: 1.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  .spinner-arc { stroke-dasharray: 126 126; opacity: 0.6; } /* a still ring instead of a spinning one */
+}
