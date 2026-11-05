@@ -230,7 +230,7 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
   h1 { font-size: 1.75rem; }
   .event-band h1 { font-size: 1.625rem; }
   .event-band .meta span { display: inline; }
-  .event-band .meta span + span::before { content: " · "; }
+  .event-band .meta span:not([hidden]) ~ span:not([hidden])::before { content: " · "; }
   .brand-logo { height: 52px; }
   .card { padding: 1.75rem; }
 }

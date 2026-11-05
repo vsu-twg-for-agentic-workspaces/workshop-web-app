@@ -10,12 +10,19 @@
 
   function setText(sel, value) {
     var el = $(sel);
-    if (el) el.textContent = value || '';
+    if (!el) return;
+    el.textContent = value || '';
+    // Blank workshop details are hidden so no stray " · " separators show.
+    if (el.closest('.meta')) el.hidden = !value;
   }
 
   function showPageError(message) {
     var box = $('#page-error');
     if (!box) return;
+    if ($('#event-title') && /Loading/.test($('#event-title').textContent)) {
+      setText('#event-title', 'Workshop not available');
+      ['#event-dates', '#event-hours', '#event-venue'].forEach(function (s) { setText(s, ''); });
+    }
     box.querySelector('p').textContent = message;
     box.hidden = false;
     document.querySelectorAll('[data-needs-event]').forEach(function (el) { el.hidden = true; });
