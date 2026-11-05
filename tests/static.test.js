@@ -88,6 +88,12 @@ test('every page has the TWG favicon set, and the icon files exist', () => {
   assert.match(read('favicon.svg'), /fill="#123F8C"/, 'favicon uses TWG blue');
 });
 
+test('button text stays readable on hover (link hover must not recolor buttons)', () => {
+  const css = read('assets/css/styles.css');
+  assert.match(css, /\.btn-primary:hover \{[^}]*color: #fff/, 'primary button text must stay white on hover');
+  assert.doesNotMatch(css, /^a:hover\s*\{/m, 'a plain a:hover rule overrides .btn colors; use a:not(.btn):hover');
+});
+
 test('all JavaScript parses', () => {
   for (const f of jsFiles) assert.doesNotThrow(() => new vm.Script(read(f), { filename: f }), f);
 });

@@ -63,7 +63,7 @@ h3 { font-size: 1.0625rem; }
 
 p { margin: 0 0 1rem; }
 a { color: var(--vsu-green); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-a:hover { color: var(--vsu-green-dark); text-decoration-thickness: 2px; }
+a:not(.btn):hover { color: var(--vsu-green-dark); text-decoration-thickness: 2px; }
 
 ::selection { background: #CDE8D6; color: var(--vsu-green-dark); }
 input, select { caret-color: var(--vsu-green); }
@@ -192,7 +192,7 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
 }
 .btn-primary { background: var(--vsu-green); color: #fff; }
 .btn { transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out; }
-.btn-primary:hover { background: var(--vsu-green-dark); border-color: var(--vsu-green-dark); }
+.btn-primary:hover { background: var(--vsu-green-dark); border-color: var(--vsu-green-dark); color: #fff; }
 .btn-primary:active { transform: translateY(1px); }
 .btn-secondary { background: #fff; color: var(--vsu-green); }
 .btn-secondary:hover { background: var(--success-bg); color: var(--vsu-green-dark); }
