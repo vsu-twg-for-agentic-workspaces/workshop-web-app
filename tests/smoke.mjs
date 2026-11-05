@@ -26,7 +26,8 @@ for (const page of ['index.html', 'register.html']) {
   });
 }
 for (const asset of ['assets/css/styles.css', 'assets/js/config.js', 'assets/js/api.js', 'assets/js/validate.js',
-  'assets/js/common.js', 'assets/js/register.js', 'assets/img/vsu-brand-logo-horizontal.png', 'assets/img/vsu-twg-logo.svg']) {
+  'assets/js/common.js', 'assets/js/register.js', 'assets/img/vsu-brand-logo-horizontal.png', 'assets/img/vsu-twg-logo.svg',
+  'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png']) {
   await check(`${asset} loads`, () => fetchOk(asset));
 }
 await check('config points to an Apps Script /exec URL (not demo mode)', async () => {

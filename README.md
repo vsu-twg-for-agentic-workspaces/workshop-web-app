@@ -33,6 +33,7 @@ Each workshop has its own `event_id` (set by facilitators in the Sheet), so one 
 
 Follows the VSU Brand Book (summarized in the workshop repo's `resources/vsu-brandbook.md`):
 - VSU Brand Logo + Text Logo in the upper left, used unaltered; no VSU Seal
+- Browser tab and home-screen icons use the TWG logo (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`)
 - VSU colors, Montserrat titles and Roboto body text
 - official campus names (e.g., "VSU Alangalang")
 

@@ -74,6 +74,20 @@ test('Brand Book: gold and yellow are never used as text color', () => {
   }
 });
 
+test('every page has the TWG favicon set, and the icon files exist', () => {
+  for (const f of ['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png']) assert.ok(fs.existsSync(path.join(root, f)), f);
+  for (const p of pages) {
+    const h = read(p);
+    assert.match(h, /<link rel="icon" href="favicon\.svg" type="image\/svg\+xml">/, p);
+    assert.match(h, /<link rel="icon" href="favicon-32\.png"/, p);
+    assert.match(h, /<link rel="apple-touch-icon" href="apple-touch-icon\.png">/, p);
+  }
+  const png = (f) => { const b = fs.readFileSync(path.join(root, f)); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
+  assert.deepEqual(png('favicon-32.png'), [32, 32]);
+  assert.deepEqual(png('apple-touch-icon.png'), [180, 180]);
+  assert.match(read('favicon.svg'), /fill="#123F8C"/, 'favicon uses TWG blue');
+});
+
 test('all JavaScript parses', () => {
   for (const f of jsFiles) assert.doesNotThrow(() => new vm.Script(read(f), { filename: f }), f);
 });
