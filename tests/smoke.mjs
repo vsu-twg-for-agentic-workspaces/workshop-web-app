@@ -30,9 +30,12 @@ for (const asset of ['assets/css/styles.css', 'assets/js/config.js', 'assets/js/
   'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png']) {
   await check(`${asset} loads`, () => fetchOk(asset));
 }
-await check('config points to an Apps Script /exec URL (not demo mode)', async () => {
+await check('LIVE API_URL points to an Apps Script /exec URL (participants are not in preview mode)', async () => {
   const js = await fetchOk('assets/js/config.js');
-  if (!/API_URL:\s*'https:\/\/script\.google\.com\/macros\/s\/[^']+\/exec'/.test(js)) throw new Error('API_URL is empty: site is in demo mode');
+  // Anchored to the start of the line so TEST_API_URL cannot satisfy it.
+  if (!/^\s*API_URL:\s*'https:\/\/script\.google\.com\/macros\/s\/[^']+\/exec'/m.test(js)) {
+    throw new Error('live API_URL is empty: participants on the published site get preview mode');
+  }
 });
 
 console.log(failures ? `\n${failures} smoke check(s) failed.` : '\nAll smoke checks passed.');
