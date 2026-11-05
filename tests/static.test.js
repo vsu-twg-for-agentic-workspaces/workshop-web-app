@@ -197,3 +197,27 @@ test('public repo hygiene: no data files, keys or spreadsheets committed', () =>
     }
   }
 });
+
+test('evaluation page has every field the back end expects, with error slots', () => {
+  const h = read('evaluate.html');
+  for (const f of ['email', 'improve', 'apply_areas', 'followup_optin', 'name_confirmed', 'website']) {
+    assert.match(h, new RegExp(`name="${f}"`), 'evaluate.html missing ' + f);
+  }
+  for (const f of ['email', 'apply_areas', 'name_confirmed']) assert.match(h, new RegExp(`id="${f}-error"`), f);
+  assert.match(h, /id="ratings"/, 'rating rows are built into #ratings');
+  assert.match(read('assets/js/evaluate.js'), /action: 'evaluate'/);
+});
+
+test('certificate page only asks for an email and never shows whether it is registered', () => {
+  const h = read('certificate.html');
+  const fields = [...h.matchAll(/<input[^>]+name="([a-z_]+)"/g)].map((m) => m[1]).sort();
+  assert.deepEqual(fields, ['email', 'website']);
+  const js = read('assets/js/certificate.js');
+  assert.match(js, /action: 'resend'/);
+  assert.match(js, /setText\('#done-message', res\.message\)/, 'shows the back end\'s generic answer');
+});
+
+test('home page links to all three participant pages', () => {
+  const h = read('index.html');
+  for (const p of ['register.html', 'evaluate.html', 'certificate.html']) assert.match(h, new RegExp(`href="${p}"`), p);
+});

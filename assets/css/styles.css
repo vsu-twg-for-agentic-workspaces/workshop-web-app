@@ -63,7 +63,8 @@ h3 { font-size: 1.0625rem; }
 
 p { margin: 0 0 1rem; }
 a { color: var(--vsu-green); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-a:not(.btn):hover { color: var(--vsu-green-dark); text-decoration-thickness: 2px; }
+a:not(.btn):not(.skip-link):hover { color: var(--vsu-green-dark); text-decoration-thickness: 2px; }
+.skip-link:hover { color: #fff; }
 
 ::selection { background: #CDE8D6; color: var(--vsu-green-dark); }
 input, select { caret-color: var(--vsu-green); }
@@ -136,7 +137,7 @@ main { max-width: 44rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 }
 .hint { display: block; font-size: 0.875rem; color: var(--text-secondary); margin: -0.125rem 0 0.375rem; }
 
-input[type="text"], input[type="email"], select {
+input[type="text"], input[type="email"], select, textarea {
   width: 100%;
   min-height: var(--tap);
   padding: 0.625rem 0.75rem;
@@ -146,8 +147,29 @@ input[type="text"], input[type="email"], select {
   border: 1px solid var(--border-medium);
   border-radius: 8px;
 }
-input[type="text"]:hover, input[type="email"]:hover, select:hover { border-color: #94A3B8; }
-input:focus, select:focus { border-color: var(--vsu-green); }
+textarea { resize: vertical; line-height: 1.5; }
+input[type="text"]:hover, input[type="email"]:hover, select:hover, textarea:hover { border-color: #94A3B8; }
+input:focus, select:focus, textarea:focus { border-color: var(--vsu-green); }
+.optional { font-weight: 400; color: var(--text-secondary); }
+
+/* 1–5 rating: five large, equal buttons in one row (a real radio group underneath). */
+.rating { margin-bottom: 1.25rem; }
+.rating legend { margin-bottom: 0.5rem; }
+.scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+.scale label { position: relative; display: block; cursor: pointer; }
+.scale input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.scale span {
+  display: flex; align-items: center; justify-content: center;
+  min-height: var(--tap);
+  font-family: var(--font-heading); font-weight: 600; font-size: 1.0625rem;
+  color: var(--vsu-green-dark); background: #fff;
+  border: 1px solid var(--border-medium); border-radius: 8px;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+}
+.scale label:hover span { border-color: var(--vsu-green-light); }
+.scale input:checked + span { background: var(--vsu-green); border-color: var(--vsu-green); color: #fff; }
+.scale input:focus-visible + span { outline: 3px solid var(--vsu-green-dark); outline-offset: 2px; }
+.scale input[aria-invalid="true"] + span { border-color: var(--error); }
 select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23146939' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");

@@ -10,9 +10,10 @@
     CAMPUS: ['VSU Main Campus', 'VSU Villaba', 'VSU Isabel', 'VSU Tolosa', 'VSU Alangalang'],
     FACULTY_OR_STAFF: ['Faculty', 'Staff'],
     PRIOR_AI_USE: ['Never', 'Tried', 'Regularly'],
+    APPLY_AREAS: ['Work', 'Profession', 'Hobby', 'Personal'],
   };
 
-  var LIMITS = { NAME_MAX: 120, TEXT_MAX: 200 };
+  var LIMITS = { NAME_MAX: 120, TEXT_MAX: 200, IMPROVE_MAX: 1000 };
 
   function normalizeEmail(email) {
     return String(email || '').trim().toLowerCase();
@@ -63,14 +64,53 @@
     return { ok: Object.keys(errors).length === 0, errors: errors, data: data };
   }
 
+  /** The five 1–5 ratings (training-design.md §11.4 Part D), in display order. */
+  var RATINGS = [
+    { name: 'rating_content', label: 'Content' },
+    { name: 'rating_pace', label: 'Pace' },
+    { name: 'rating_handouts_labs', label: 'Handouts and labs' },
+    { name: 'rating_facilitators', label: 'Facilitators' },
+    { name: 'rating_overall', label: 'Overall' },
+  ];
+
+  function rating(v) {
+    var n = Number(v);
+    return Number.isInteger(n) && n >= 1 && n <= 5 ? n : null;
+  }
+
+  /** Evaluation (Parts D–F + Confirm). Same rules as the back end. */
+  function validateEvaluation(input) {
+    var p = input || {};
+    var errors = {};
+    var data = {
+      email: normalizeEmail(p.email),
+      improve: cleanText(p.improve, LIMITS.IMPROVE_MAX),
+      apply_areas: (Array.isArray(p.apply_areas) ? p.apply_areas : []).filter(function (a) {
+        return CHOICES.APPLY_AREAS.indexOf(a) !== -1;
+      }),
+      followup_optin: p.followup_optin === true,
+      name_confirmed: p.name_confirmed === true,
+    };
+    if (!isValidEmail(data.email)) errors.email = 'Enter the email you used to register.';
+    RATINGS.forEach(function (r) {
+      data[r.name] = rating(p[r.name]);
+      if (data[r.name] === null) errors[r.name] = 'Choose a rating from 1 to 5.';
+    });
+    if (!data.apply_areas.length) errors.apply_areas = 'Choose at least one.';
+    if (!data.name_confirmed) errors.name_confirmed = 'Please confirm before submitting.';
+    return { ok: Object.keys(errors).length === 0, errors: errors, data: data };
+  }
+
   var api = {
     CHOICES: CHOICES,
     LIMITS: LIMITS,
+    RATINGS: RATINGS,
     normalizeEmail: normalizeEmail,
     isValidEmail: isValidEmail,
     cleanText: cleanText,
     domainAllowed: domainAllowed,
     validateRegistration: validateRegistration,
+    validateEvaluation: validateEvaluation,
   };
 
   root.WorkshopValidate = api;

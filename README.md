@@ -17,8 +17,8 @@ Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ 
 |---|---|---|
 | Workshop home | `index.html?event=<event_id>` | Ready |
 | Registration | `register.html?event=<event_id>` | Ready |
-| Evaluation | `evaluate.html?event=<event_id>` | Planned (step 3); not linked yet |
-| Check my certificate | `certificate.html?event=<event_id>` | Planned (step 3) |
+| Evaluation (Day 2) | `evaluate.html?event=<event_id>` | Ready |
+| Check my certificate | `certificate.html?event=<event_id>` | Ready |
 
 Each workshop has its own `event_id` (set by facilitators in the Sheet), so one site serves every workshop.
 
