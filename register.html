@@ -21,7 +21,6 @@
 
   <section class="event-band" aria-labelledby="event-title">
     <div class="inner">
-      <p class="eyebrow">Registration</p>
       <h1 id="event-title">Loading workshop…</h1>
       <p class="meta"><span id="event-dates"></span><span id="event-hours"></span><span id="event-venue"></span></p>
     </div>
@@ -34,6 +33,7 @@
     <div class="notice notice-error" id="page-error" role="alert" hidden><p></p></div>
 
     <form id="reg-form" novalidate data-needs-event>
+      <p class="lead">Register for this workshop in three short steps. It takes about three minutes.</p>
       <ol class="steps" aria-label="Registration steps">
         <li data-step-label="1" aria-current="step">1. Privacy</li>
         <li data-step-label="2">2. Certificate</li>
@@ -49,7 +49,7 @@
       <section class="card" data-step="1" aria-labelledby="s1-title">
         <h2 id="s1-title">Privacy notice</h2>
         <p>Before you register, please read how we handle your information. It takes about one minute.</p>
-        <div class="privacy" tabindex="0" aria-label="Privacy notice text">
+        <div class="privacy">
           <p class="notice notice-info"><strong>Draft:</strong> this notice is awaiting review by the VSU Data Protection Officer before registration opens.</p>
           <h3>Who collects your information</h3>
           <p>The facilitators of the TWG for Agentic Workspaces, Visayas State University, for the workshop shown above.</p>
@@ -162,11 +162,10 @@
       </section>
     </form>
 
-    <section class="card" id="done" hidden tabindex="-1" aria-labelledby="done-title">
-      <div class="notice notice-success" role="status">
-        <h2 id="done-title">You are registered</h2>
-        <p id="done-message"></p>
-      </div>
+    <section class="card card-success" id="done" hidden tabindex="-1" aria-labelledby="done-title">
+      <svg class="done-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg>
+      <h2 id="done-title">You are registered</h2>
+      <p id="done-message" role="status"></p>
       <p>Please watch your email for the <strong>Pre-Workshop Kit</strong>, which explains the accounts to set up before Day 1.</p>
       <a class="btn btn-secondary" href="index.html" data-keep-event>Back to the workshop page</a>
     </section>
