@@ -19,7 +19,7 @@
   function showPageError(message) {
     var box = $('#page-error');
     if (!box) return;
-    if ($('#event-title') && /Loading/.test($('#event-title').textContent)) {
+    if ($('#event-title') && !$('#event-title').textContent.trim()) {
       setText('#event-title', 'Workshop not available');
       ['#event-dates', '#event-hours', '#event-venue'].forEach(function (s) { setText(s, ''); });
     }
@@ -28,8 +28,26 @@
     document.querySelectorAll('[data-needs-event]').forEach(function (el) { el.hidden = true; });
   }
 
-  /** Resolves with the event object, or null after showing an error. */
+  /** Hide the full-page loader and show the page (called once, success or failure). */
+  function finishLoading() {
+    document.body.classList.remove('is-loading');
+    var loader = $('#page-loader');
+    if (loader) loader.setAttribute('aria-hidden', 'true');
+  }
+
+  /** Resolves with the event object, or null after showing an error. Always ends the loader. */
   function loadEvent() {
+    return fetchEvent().then(function (ev) {
+      finishLoading();
+      return ev;
+    }, function (err) {
+      showPageError('Something went wrong while loading. Please refresh the page or see a facilitator.');
+      finishLoading();
+      return null;
+    });
+  }
+
+  function fetchEvent() {
     var id = window.WorkshopApi.eventIdFromUrl();
     if (!id && !window.WorkshopApi.isDemo()) {
       showPageError('This link is missing the workshop code. Please use the link or QR code from the facilitators.');
@@ -56,5 +74,5 @@
     });
   }
 
-  window.WorkshopPage = { $: $, setText: setText, loadEvent: loadEvent, showPageError: showPageError };
+  window.WorkshopPage = { $: $, setText: setText, loadEvent: loadEvent, showPageError: showPageError, finishLoading: finishLoading };
 })();

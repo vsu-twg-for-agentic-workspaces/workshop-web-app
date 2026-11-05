@@ -94,6 +94,27 @@ test('button text stays readable on hover (link hover must not recolor buttons)'
   assert.doesNotMatch(css, /^a:hover\s*\{/m, 'a plain a:hover rule overrides .btn colors; use a:not(.btn):hover');
 });
 
+test('every page starts with a centered full-page loader that announces itself', () => {
+  for (const p of pages) {
+    const h = read(p);
+    assert.match(h, /<body class="is-loading">/, p);
+    assert.match(h, /id="page-loader" role="status" aria-live="polite"/, p);
+    assert.match(h, /<div class="page-content">/, p);
+    assert.doesNotMatch(h, /<h1[^>]*>Loading/, p + ': no "Loading" heading; the loader covers it');
+    assert.match(h, /<noscript><style>[^<]*page-content[^<]*<\/style><\/noscript>/, p + ': content must show without JavaScript');
+  }
+  const css = read('assets/css/styles.css');
+  assert.match(css, /\.page-loader \{[^}]*position: fixed; inset: 0;[^}]*justify-content: center/);
+  assert.match(css, /prefers-reduced-motion[\s\S]*\.spinner-arc/, 'spinner must stop for reduced motion');
+});
+
+test('the loader always ends: on success, on error, and when the request fails', () => {
+  const js = read('assets/js/common.js');
+  assert.match(js, /function finishLoading\(\)/);
+  assert.match(js, /fetchEvent\(\)\.then\(function \(ev\) \{\s*finishLoading\(\);[\s\S]*?function \(err\) \{[\s\S]*?finishLoading\(\);/);
+  assert.match(read('assets/js/api.js'), /withTimeout\(fetch\(url/, 'the event lookup has a timeout so the loader cannot spin forever');
+});
+
 test('all JavaScript parses', () => {
   for (const f of jsFiles) assert.doesNotThrow(() => new vm.Script(read(f), { filename: f }), f);
 });

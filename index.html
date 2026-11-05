@@ -14,7 +14,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body>
+<body class="is-loading">
+  <div class="page-loader" id="page-loader" role="status" aria-live="polite">
+    <svg class="spinner" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">
+      <circle class="spinner-track" cx="24" cy="24" r="20"/>
+      <circle class="spinner-arc" cx="24" cy="24" r="20"/>
+    </svg>
+    <p>Loading workshop…</p>
+  </div>
+  <noscript><style>.is-loading .page-loader { display: none; } .is-loading .page-content { visibility: visible; opacity: 1; }</style></noscript>
+  <div class="page-content">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -25,7 +34,7 @@
 
   <section class="event-band" aria-labelledby="event-title">
     <div class="inner">
-      <h1 id="event-title">Loading workshop…</h1>
+      <h1 id="event-title"></h1>
       <p class="meta"><span id="event-dates"></span><span id="event-hours"></span><span id="event-venue"></span></p>
     </div>
   </section>
@@ -57,6 +66,7 @@
     </div>
   </footer>
 
+  </div>
   <noscript><p class="notice notice-error">Please turn on JavaScript to use this page, or ask a facilitator for a printed form.</p></noscript>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
