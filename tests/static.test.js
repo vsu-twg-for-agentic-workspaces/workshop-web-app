@@ -143,11 +143,18 @@ test('every field has an error slot and is described by it', () => {
   }
 });
 
-test('config: API_URL is empty (demo) or an Apps Script /exec URL', () => {
+test('config: API_URL and TEST_API_URL are empty (preview) or Apps Script /exec URLs, and never the same', () => {
   const ctx = vm.createContext({ window: {} });
   vm.runInContext(read('assets/js/config.js'), ctx);
-  const url = ctx.window.WORKSHOP_CONFIG.API_URL;
-  assert.ok(url === '' || /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url), url);
+  const { API_URL, TEST_API_URL } = ctx.window.WORKSHOP_CONFIG;
+  for (const url of [API_URL, TEST_API_URL]) {
+    assert.ok(url === '' || /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url), url);
+  }
+  if (API_URL && TEST_API_URL) assert.notEqual(API_URL, TEST_API_URL, 'test and live must be separate back ends');
+});
+
+test('every page has the test-environment banner', () => {
+  for (const p of pages) assert.match(read(p), /id="env-banner"/, p);
 });
 
 test('public repo hygiene: no data files, keys or spreadsheets committed', () => {

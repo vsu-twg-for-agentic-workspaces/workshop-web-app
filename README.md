@@ -24,10 +24,23 @@ Each workshop has its own `event_id` (set by facilitators in the Sheet), so one 
 
 ## Setup
 
-1. Deploy the Apps Script back end and copy its web app URL (ends in `/exec`).
-2. Put it in `assets/js/config.js` as `API_URL`.
+1. Deploy the two Apps Script back ends, **test** and **live** (see the workshop repo's `web-app/README.md`, *Test and live environments*).
+2. Put their web app URLs (ending in `/exec`) in `assets/js/config.js`:
+   - `API_URL`: the **live** back end, used by participants
+   - `TEST_API_URL`: the **test** back end
 3. Turn on GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
 4. Share `https://vsu-twg-for-agentic-workspaces.github.io/workshop-web-app/?event=<event_id>`.
+
+## Test and live
+
+| How the page is opened | Back end used | What you see |
+|---|---|---|
+| The published link (participants) | **Live** (`API_URL`) | Normal page |
+| The published link + `&env=test` | **Test** (`TEST_API_URL`) | Blue "Test environment" note |
+| From your own computer (`file://` or `localhost`) | **Test** | Blue "Test environment" note |
+| Either, with its URL still empty | None (preview) | Yellow "Preview mode" note; nothing is saved |
+
+The test page never falls back to the live back end, and links within the site keep `&env=test`.
 
 ## Design
 

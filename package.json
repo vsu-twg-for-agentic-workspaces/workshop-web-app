@@ -1,11 +1,13 @@
 {
   "name": "workshop-web-app",
   "private": true,
-  "description": "Front end (GitHub Pages) of the VSU workshop web app — tests only, no dependencies",
-  "engines": { "node": ">=18" },
+  "description": "Front end (GitHub Pages) of the VSU workshop web app \u2014 tests only, no dependencies",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "test": "node --test tests/validate.test.js tests/static.test.js",
-    "test:unit": "node --test tests/validate.test.js",
+    "test": "node --test tests/validate.test.js tests/env.test.js tests/static.test.js",
+    "test:unit": "node --test tests/validate.test.js tests/env.test.js",
     "test:static": "node --test tests/static.test.js",
     "test:smoke": "node tests/smoke.mjs"
   }

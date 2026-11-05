@@ -3,10 +3,35 @@
  * POST bodies are sent as text/plain so the browser makes a "simple" request
  * (no CORS preflight), which Apps Script web apps accept.
  */
-(function () {
+(function (root) {
   'use strict';
 
+  /**
+   * Decide which back end to use. Pure function, so it can be unit-tested.
+   * loc: { protocol, hostname, search }. Returns { env: 'test'|'live', url }.
+   */
+  function chooseEnvironment(cfg, loc) {
+    cfg = cfg || {};
+    var params = new URLSearchParams(loc.search || '');
+    var local = loc.protocol === 'file:' || loc.hostname === 'localhost' || loc.hostname === '127.0.0.1';
+    var wantsTest = params.get('env') === 'test' || local;
+    return wantsTest
+      ? { env: 'test', url: cfg.TEST_API_URL || '' }
+      : { env: 'live', url: cfg.API_URL || '' };
+  }
+
+  function eventIdFrom(search) {
+    var id = new URLSearchParams(search || '').get('event') || '';
+    return /^[A-Za-z0-9-]{1,40}$/.test(id) ? id : '';
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { chooseEnvironment: chooseEnvironment, eventIdFrom: eventIdFrom };
+  }
+  if (typeof window === 'undefined') return;
+
   var cfg = window.WORKSHOP_CONFIG || {};
+  var target = chooseEnvironment(cfg, window.location);
   var DEMO_EVENT = {
     event_id: 'DEMO',
     title: 'Capacity Building in Using AI Agents and Workflows in the University',
@@ -17,7 +42,7 @@
   };
 
   function isDemo() {
-    return !cfg.API_URL;
+    return !target.url;
   }
 
   function withTimeout(promise, ms) {
@@ -35,7 +60,7 @@
 
   function getEvent(eventId) {
     if (isDemo()) return Promise.resolve({ ok: true, event: Object.assign({}, DEMO_EVENT, { event_id: eventId || 'DEMO' }), demo: true });
-    var url = cfg.API_URL + '?action=event&event=' + encodeURIComponent(eventId || '');
+    var url = target.url + '?action=event&event=' + encodeURIComponent(eventId || '');
     return withTimeout(fetch(url, { redirect: 'follow' }), 20000)
       .then(function (r) { return r.json(); })
       .catch(networkError);
@@ -45,11 +70,11 @@
     if (isDemo()) {
       return new Promise(function (resolve) {
         setTimeout(function () {
-          resolve({ ok: true, demo: true, message: 'Demo mode: nothing was saved. Set API_URL in assets/js/config.js to connect the back end.' });
+          resolve({ ok: true, demo: true, message: 'Preview mode: nothing was saved.' });
         }, 600);
       });
     }
-    return withTimeout(fetch(cfg.API_URL, {
+    return withTimeout(fetch(target.url, {
       method: 'POST',
       redirect: 'follow',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -59,10 +84,11 @@
       .catch(networkError);
   }
 
-  function eventIdFromUrl() {
-    var id = new URLSearchParams(window.location.search).get('event') || '';
-    return /^[A-Za-z0-9-]{1,40}$/.test(id) ? id : '';
-  }
-
-  window.WorkshopApi = { getEvent: getEvent, post: post, isDemo: isDemo, eventIdFromUrl: eventIdFromUrl };
-})();
+  root.WorkshopApi = {
+    env: target.env,
+    getEvent: getEvent,
+    post: post,
+    isDemo: isDemo,
+    eventIdFromUrl: function () { return eventIdFrom(window.location.search); },
+  };
+})(typeof window !== 'undefined' ? window : this);

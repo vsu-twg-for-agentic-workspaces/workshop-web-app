@@ -39,9 +39,11 @@
       setText('#event-hours', ev.days_hours);
       setText('#event-venue', ev.venue);
       document.title = document.title.replace(/ — .*$/, '') + ' — ' + ev.title;
-      if (res.demo) $('#demo-banner') && ($('#demo-banner').hidden = false);
+      if (res.demo && $('#demo-banner')) $('#demo-banner').hidden = false;
+      else if (window.WorkshopApi.env === 'test' && $('#env-banner')) $('#env-banner').hidden = false;
+      var keepTest = new URLSearchParams(window.location.search).get('env') === 'test';
       document.querySelectorAll('a[data-keep-event]').forEach(function (a) {
-        a.href = a.getAttribute('href').split('?')[0] + '?event=' + encodeURIComponent(ev.event_id);
+        a.href = a.getAttribute('href').split('?')[0] + '?event=' + encodeURIComponent(ev.event_id) + (keepTest ? '&env=test' : '');
       });
       return ev;
     });

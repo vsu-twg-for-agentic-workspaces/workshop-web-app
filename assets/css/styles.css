@@ -206,6 +206,8 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
 .notice-error strong { color: var(--error); }
 .notice-success { background: var(--success-bg); border-color: var(--success-border); }
 .notice-info { background: var(--info-bg); border-color: var(--info-border); }
+.notice-test { background: #EEF2FA; border-color: #9AAED3; }
+.notice-test strong { color: #123F8C; }
 
 .card-success { text-align: left; }
 .done-icon { display: block; margin-bottom: 0.75rem; fill: var(--success-bg); stroke: var(--vsu-green); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
