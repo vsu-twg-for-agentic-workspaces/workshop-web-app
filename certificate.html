@@ -50,7 +50,7 @@
 
     <form class="card" id="cert-form" novalidate data-needs-event aria-labelledby="cert-title">
       <h2 id="cert-title">Check my certificate</h2>
-      <p>Didn't receive your certificate, or deleted it by mistake? Enter the email you registered with and we'll send it again. For privacy, it is only ever sent to that email.</p>
+      <p>Download or print your certificate. Enter the email and the full name you registered with; both must match.</p>
 
       <div class="notice notice-error" id="form-errors" role="alert" tabindex="-1" hidden>
         <p><strong>Please check the following:</strong></p>
@@ -59,8 +59,14 @@
 
       <div class="field">
         <label for="email">Email you used to register</label>
-        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="email-error">
+        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="juan.delacruz@vsu.edu.ph" aria-describedby="email-error">
         <span class="field-error" id="email-error"></span>
+      </div>
+
+      <div class="field">
+        <label for="full_name">Full name, as you registered it</label>
+        <input type="text" id="full_name" name="full_name" autocomplete="name" maxlength="120" required placeholder="Juan A. Dela Cruz" aria-describedby="full_name-error">
+        <span class="field-error" id="full_name-error"></span>
       </div>
 
       <div class="hp" aria-hidden="true">
@@ -69,17 +75,21 @@
       </div>
 
       <div class="actions">
-        <button type="submit" class="btn btn-primary btn-block" id="submit-btn">Send my certificate</button>
+        <button type="submit" class="btn btn-primary btn-block" id="submit-btn">Get my certificate</button>
       </div>
-      <p class="hint" style="margin-top:1rem">Certificates are sent after you submit the workshop evaluation and the facilitators finish scoring.</p>
+      <p class="hint" style="margin-top:1rem">Your certificate is ready after you submit the workshop evaluation and the facilitators finish scoring.</p>
     </form>
 
     <section class="card card-success" id="done" hidden tabindex="-1" aria-labelledby="done-title">
       <svg class="done-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg>
-      <h2 id="done-title">Request received</h2>
+      <h2 id="done-title">Your certificate is ready</h2>
       <p id="done-message" role="status"></p>
-      <p>Check your inbox and spam folder in a few minutes. Still nothing? Ask a facilitator.</p>
-      <a class="btn btn-secondary" href="index.html" data-keep-event>Back to the workshop page</a>
+      <p class="hint">This copy is <strong>unsigned</strong>. The signatories sign the printed copies in ink; ask the facilitators how to get yours.</p>
+      <ul class="link-list">
+        <li><a class="btn btn-primary btn-block" id="download-link" href="#" download>Download PDF</a></li>
+        <li><a class="btn btn-secondary btn-block" id="print-link" href="#" target="_blank" rel="noopener">Open to print</a></li>
+        <li><a class="btn btn-secondary btn-block" href="index.html" data-keep-event>Back to the workshop page</a></li>
+      </ul>
     </section>
   </main>
 

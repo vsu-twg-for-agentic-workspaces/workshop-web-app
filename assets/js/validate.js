@@ -10,10 +10,10 @@
     CAMPUS: ['VSU Main Campus', 'VSU Villaba', 'VSU Isabel', 'VSU Tolosa', 'VSU Alangalang'],
     FACULTY_OR_STAFF: ['Faculty', 'Staff'],
     PRIOR_AI_USE: ['Never', 'Tried', 'Regularly'],
-    APPLY_AREAS: ['Work', 'Profession', 'Hobby', 'Personal'],
+    APPLY_AREAS: ['Work', 'Profession', 'Hobby', 'Personal', 'Other'],
   };
 
-  var LIMITS = { NAME_MAX: 120, TEXT_MAX: 200, IMPROVE_MAX: 1000 };
+  var LIMITS = { NAME_MAX: 120, TEXT_MAX: 200, IMPROVE_MAX: 1000, OTHER_MAX: 200 };
 
   function normalizeEmail(email) {
     return String(email || '').trim().toLowerCase();
@@ -56,7 +56,7 @@
     if (!isValidEmail(data.email)) errors.email = 'Enter a valid email address, like juan.delacruz@vsu.edu.ph.';
     else if (!domainAllowed(data.email, allowedDomains)) errors.email = 'Use your institutional email address (' + allowedDomains.join(', ') + ').';
     if (CHOICES.CAMPUS.indexOf(data.campus) === -1) errors.campus = 'Choose your campus.';
-    if (!data.college_office) errors.college_office = 'Enter your college or office.';
+    if (!data.college_office) errors.college_office = 'Enter your office.';
     if (!data.position) errors.position = 'Enter your position or designation.';
     if (CHOICES.FACULTY_OR_STAFF.indexOf(data.faculty_or_staff) === -1) errors.faculty_or_staff = 'Choose Faculty or Staff.';
     if (CHOICES.PRIOR_AI_USE.indexOf(data.prior_ai_use) === -1) errors.prior_ai_use = 'Choose one answer.';
@@ -78,7 +78,7 @@
     return Number.isInteger(n) && n >= 1 && n <= 5 ? n : null;
   }
 
-  /** Evaluation (Parts D–F + Confirm). Same rules as the back end. */
+  /** Evaluation (Parts D–E + Confirm). Same rules as the back end. */
   function validateEvaluation(input) {
     var p = input || {};
     var errors = {};
@@ -88,15 +88,17 @@
       apply_areas: (Array.isArray(p.apply_areas) ? p.apply_areas : []).filter(function (a) {
         return CHOICES.APPLY_AREAS.indexOf(a) !== -1;
       }),
-      followup_optin: p.followup_optin === true,
+      apply_areas_other: '',
       name_confirmed: p.name_confirmed === true,
     };
+    if (data.apply_areas.indexOf('Other') !== -1) data.apply_areas_other = cleanText(p.apply_areas_other, LIMITS.OTHER_MAX);
     if (!isValidEmail(data.email)) errors.email = 'Enter the email you used to register.';
     RATINGS.forEach(function (r) {
       data[r.name] = rating(p[r.name]);
       if (data[r.name] === null) errors[r.name] = 'Choose a rating from 1 to 5.';
     });
     if (!data.apply_areas.length) errors.apply_areas = 'Choose at least one.';
+    else if (data.apply_areas.indexOf('Other') !== -1 && !data.apply_areas_other) errors.apply_areas_other = 'Tell us the other area.';
     if (!data.name_confirmed) errors.name_confirmed = 'Please confirm before submitting.';
     return { ok: Object.keys(errors).length === 0, errors: errors, data: data };
   }

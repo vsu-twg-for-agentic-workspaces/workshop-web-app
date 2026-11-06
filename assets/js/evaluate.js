@@ -1,6 +1,6 @@
 /*
- * evaluate.js — the Day 2 evaluation form. Submitting it releases the certificate
- * (the back end checks the participant is registered and marked present).
+ * evaluate.js — the Day 2 evaluation form. Submitting it makes the certificate
+ * ready to download (the back end checks the participant is registered and marked present).
  */
 (function () {
   'use strict';
@@ -48,7 +48,7 @@
       email: fd.get('email'),
       improve: fd.get('improve'),
       apply_areas: fd.getAll('apply_areas'),
-      followup_optin: document.getElementById('followup_optin').checked,
+      apply_areas_other: fd.get('apply_areas_other'),
       name_confirmed: document.getElementById('name_confirmed').checked,
       website: fd.get('website') || '',
     };
@@ -78,6 +78,20 @@
     box.focus();
   }
 
+  // "Other" shows its text box only when ticked.
+  var otherBox = document.getElementById('apply_other');
+  var otherField = document.getElementById('apply_areas_other-field');
+  function syncOther() {
+    otherField.hidden = !otherBox.checked;
+    otherBox.setAttribute('aria-expanded', otherBox.checked ? 'true' : 'false');
+    if (!otherBox.checked) setFieldError('apply_areas_other', '');
+  }
+  otherBox.addEventListener('change', function () {
+    syncOther();
+    if (otherBox.checked) document.getElementById('apply_areas_other').focus();
+  });
+  syncOther();
+
   form.addEventListener('change', function (e) {
     if (e.target.name) setFieldError(e.target.name, '');
   });
@@ -87,7 +101,7 @@
     document.getElementById('form-errors').hidden = true;
     var raw = readForm();
     var result = V.validateEvaluation(raw);
-    var names = ['email'].concat(V.RATINGS.map(function (r) { return r.name; }), ['apply_areas', 'name_confirmed']);
+    var names = ['email'].concat(V.RATINGS.map(function (r) { return r.name; }), ['apply_areas', 'apply_areas_other', 'name_confirmed']);
     var firstBad = null;
     names.forEach(function (name) {
       setFieldError(name, result.errors[name]);

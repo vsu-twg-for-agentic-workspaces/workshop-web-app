@@ -2,7 +2,9 @@
 
 The participant pages of the workshop web app for **Capacity Building in Using AI Agents and Workflows in the University** at Visayas State University (VSU). Built by the TWG for Agentic Workspaces.
 
-Think of this site as the **front desk**: participants register and, later, submit the evaluation here. The **logbook** behind it is a Google Sheet, and an Apps Script **clerk** checks and files every submission and emails certificates. The back end lives in the private workshop repository (`web-app/`, issue #35).
+Think of this site as the **front desk**: participants register, submit the evaluation, and download their certificate here. The **logbook** behind it is a Google Sheet, and an Apps Script **clerk** checks and files every submission and prepares the certificates. The back end lives in the private workshop repository (`web-app/`, issue #35).
+
+**The app sends no email.** Participants download or print their **unsigned** certificate from "Check my certificate" (email + full name). The signatories sign the printed copies in ink. Anyone can check a control number on the Verify page.
 
 ```
 Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ Google Sheet
@@ -18,7 +20,8 @@ Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ 
 | Workshop home | `index.html?event=<event_id>` | Ready |
 | Registration | `register.html?event=<event_id>` | Ready |
 | Evaluation (Day 2) | `evaluate.html?event=<event_id>` | Ready |
-| Check my certificate | `certificate.html?event=<event_id>` | Ready |
+| Check my certificate (download or print the unsigned PDF) | `certificate.html?event=<event_id>` | Ready |
+| Verify a certificate (no workshop code needed) | `verify.html` or `verify.html?ref=<control number>` | Ready |
 
 Each workshop has its own `event_id` (set by facilitators in the Sheet), so one site serves every workshop.
 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verify a certificate</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#17321A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="is-loading">
+  <div class="page-loader" id="page-loader" role="status" aria-live="polite">
+    <svg class="spinner" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">
+      <circle class="spinner-track" cx="24" cy="24" r="20"/>
+      <circle class="spinner-arc" cx="24" cy="24" r="20"/>
+    </svg>
+    <p>Loading…</p>
+  </div>
+  <noscript><style>.is-loading .page-loader { display: none; } .is-loading .page-content { visibility: visible; opacity: 1; }</style></noscript>
+  <div class="page-content">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="inner">
+      <a href="index.html"><img class="brand-logo" src="assets/img/vsu-brand-logo-horizontal.png" alt="Visayas State University — workshop home" width="160" height="52"></a>
+    </div>
+  </header>
+
+  <section class="event-band" aria-labelledby="event-title">
+    <div class="inner">
+      <h1 id="event-title">Verify a certificate</h1>
+      <p class="meta"><span>TWG for Agentic Workspaces, Visayas State University</span></p>
+    </div>
+  </section>
+
+  <main id="main">
+    <div class="notice notice-info" id="demo-banner" hidden>
+      <p><strong>Preview mode.</strong> This page is not connected to the workshop system yet, so the result below is only a sample.</p>
+    </div>
+    <div class="notice notice-test" id="env-banner" role="note" hidden>
+      <p><strong>Test environment.</strong> This checks the test Sheet, not the real certificate list.</p>
+    </div>
+
+    <form class="card" id="verify-form" novalidate aria-labelledby="verify-title">
+      <h2 id="verify-title">Is this certificate genuine?</h2>
+      <p>Enter the control number printed on the certificate. We show only the certificate type, the workshop and the date of issue; never the holder's name or email.</p>
+
+      <div class="field">
+        <label for="ref">Control number</label>
+        <input type="text" id="ref" name="ref" maxlength="60" autocomplete="off" autocapitalize="characters" spellcheck="false" required placeholder="TWG-AW-2026-C-001" aria-describedby="ref-error">
+        <span class="field-error" id="ref-error"></span>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary btn-block" id="submit-btn">Verify</button>
+      </div>
+    </form>
+
+    <section class="card card-success" id="result-ok" hidden tabindex="-1" aria-labelledby="ok-title">
+      <svg class="done-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg>
+      <h2 id="ok-title">Genuine certificate</h2>
+      <p role="status">Control number <strong id="r-ref"></strong> was issued by the TWG for Agentic Workspaces.</p>
+      <dl class="facts">
+        <dt>Certificate</dt><dd id="r-type"></dd>
+        <dt>Workshop</dt><dd id="r-workshop"></dd>
+        <dt>Date of issue</dt><dd id="r-date"></dd>
+      </dl>
+      <p class="hint">Check that the details printed on the certificate match the details above.</p>
+    </section>
+
+    <section class="card" id="result-none" hidden tabindex="-1" aria-labelledby="none-title">
+      <h2 id="none-title">Not found</h2>
+      <p id="none-message" role="status"></p>
+      <p class="hint">Still unsure? Contact the TWG for Agentic Workspaces, Department of Computer Science and Technology, Visayas State University.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <img src="assets/img/vsu-twg-logo.svg" alt="" width="40" height="40">
+      <p>Organized by the TWG for Agentic Workspaces, Visayas State University. For workshop use only.</p>
+    </div>
+  </footer>
+
+  </div>
+  <noscript><p class="notice notice-error">Please turn on JavaScript to use this page.</p></noscript>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/verify.js"></script>
+</body>
+</html>
