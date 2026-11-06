@@ -66,24 +66,23 @@
         <h2 id="s1-title">Privacy notice</h2>
         <p>Before you register, please read how we handle your information. It takes about one minute.</p>
         <div class="privacy">
-          <p class="notice notice-info"><strong>Draft:</strong> this notice is awaiting review by the VSU Data Protection Officer before registration opens.</p>
           <h3>Who collects your information</h3>
           <p>The facilitators of the TWG for Agentic Workspaces, Visayas State University, for the workshop shown above.</p>
           <h3>What we collect</h3>
           <ul>
             <li>Your full name and institutional email, for your certificate</li>
-            <li>Your campus, college or office, position, whether you are faculty or staff, and how often you have used AI tools</li>
+            <li>Your campus, office, position, whether you are faculty or staff, and how often you have used AI tools</li>
             <li>Later, your workshop evaluation and attendance</li>
           </ul>
           <p>We do <strong>not</strong> ask for your birth date, home address, or ID numbers.</p>
           <h3>Why we collect it</h3>
           <ul>
             <li>To prepare the participant list and track attendance</li>
-            <li>To issue and email your certificate</li>
+            <li>To prepare your certificate</li>
             <li>To improve the workshop, using combined results only (never individual answers)</li>
           </ul>
           <h3>Who can see it and where it is kept</h3>
-          <p>Only the three workshop facilitators. Your information is stored in a Google Sheet in a facilitator's Google account, and certificates are sent by email. It is kept for <strong>[retention period, to be confirmed with the DPO]</strong>, then deleted.</p>
+          <p>Only the three workshop facilitators. Your information is stored in a Google Sheet in a facilitator's Google account, and certificates are saved as PDF files in a Google Drive folder that only the facilitators can open. The app does not send you any email. It is kept for <strong>[retention period, to be confirmed by the facilitators]</strong>, then deleted.</p>
           <h3>Your rights</h3>
           <p>Under the Data Privacy Act of 2012 (Republic Act No. 10173), you may ask to see, correct, or delete your information, or withdraw your consent, by contacting the facilitators<span id="support-contact"></span>.</p>
         </div>
@@ -108,14 +107,14 @@
         <div class="field">
           <label for="full_name">Full name</label>
           <span class="hint" id="full_name-hint">Exactly as it should appear on your certificate, e.g., Juan A. Dela Cruz</span>
-          <input type="text" id="full_name" name="full_name" autocomplete="name" maxlength="120" required aria-describedby="full_name-hint full_name-error">
+          <input type="text" id="full_name" name="full_name" autocomplete="name" maxlength="120" required placeholder="Juan A. Dela Cruz" aria-describedby="full_name-hint full_name-error">
           <span class="field-error" id="full_name-error"></span>
         </div>
 
         <div class="field">
           <label for="email">Institutional email</label>
-          <span class="hint" id="email-hint">Your certificate will be sent here.</span>
-          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="email-hint email-error">
+          <span class="hint" id="email-hint">You will use this email, with your full name, to download your certificate.</span>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="juan.delacruz@vsu.edu.ph" aria-describedby="email-hint email-error">
           <span class="field-error" id="email-error"></span>
         </div>
 
@@ -138,15 +137,16 @@
         </div>
 
         <div class="field">
-          <label for="college_office">College or office</label>
-          <span class="hint" id="college_office-hint">e.g., College of Arts and Sciences, or Office of the Registrar</span>
-          <input type="text" id="college_office" name="college_office" maxlength="200" required aria-describedby="college_office-hint college_office-error">
+          <label for="college_office">Office</label>
+          <span class="hint" id="college_office-hint">e.g., Faculty of Natural and Mathematical Sciences, Department of Computer Science and Technology, or Office of the Director for Quality Assurance</span>
+          <input type="text" id="college_office" name="college_office" maxlength="200" required placeholder="Department of Computer Science and Technology" aria-describedby="college_office-hint college_office-error">
           <span class="field-error" id="college_office-error"></span>
         </div>
 
         <div class="field">
           <label for="position">Position or designation</label>
-          <input type="text" id="position" name="position" autocomplete="organization-title" maxlength="200" required aria-describedby="position-error">
+          <span class="hint" id="position-hint">e.g., Administrative Aide II, Department dDRC, Research Assistant, or Professor VI and Head, DPM</span>
+          <input type="text" id="position" name="position" autocomplete="organization-title" maxlength="200" required placeholder="Administrative Aide II" aria-describedby="position-hint position-error">
           <span class="field-error" id="position-error"></span>
         </div>
 

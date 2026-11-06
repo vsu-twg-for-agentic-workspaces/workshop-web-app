@@ -66,6 +66,20 @@
       .catch(networkError);
   }
 
+  /** Verify page: is this control number genuine? Needs no workshop code. */
+  function verify(ref) {
+    if (isDemo()) {
+      return Promise.resolve({
+        ok: true, demo: true,
+        certificate: { ref: String(ref || '').trim().toUpperCase(), label: 'Certificate of Completion (preview)', workshop: DEMO_EVENT.title, issue_date: 'Sample date' },
+      });
+    }
+    var url = target.url + '?action=verify&ref=' + encodeURIComponent(ref || '');
+    return withTimeout(fetch(url, { redirect: 'follow' }), 20000)
+      .then(function (r) { return r.json(); })
+      .catch(networkError);
+  }
+
   function post(body) {
     if (isDemo()) {
       return new Promise(function (resolve) {
@@ -87,6 +101,7 @@
   root.WorkshopApi = {
     env: target.env,
     getEvent: getEvent,
+    verify: verify,
     post: post,
     isDemo: isDemo,
     eventIdFromUrl: function () { return eventIdFrom(window.location.search); },

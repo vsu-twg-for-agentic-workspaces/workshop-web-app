@@ -19,14 +19,14 @@ const fetchOk = async (p, type) => {
   return r.text();
 };
 
-for (const page of ['index.html', 'register.html']) {
+for (const page of ['index.html', 'register.html', 'evaluate.html', 'certificate.html', 'verify.html']) {
   await check(`${page} is published`, async () => {
     const html = await fetchOk(page, 'text/html');
     if (!html.includes('vsu-brand-logo-horizontal.png')) throw new Error('VSU logo missing');
   });
 }
 for (const asset of ['assets/css/styles.css', 'assets/js/config.js', 'assets/js/api.js', 'assets/js/validate.js',
-  'assets/js/common.js', 'assets/js/register.js', 'assets/img/vsu-brand-logo-horizontal.png', 'assets/img/vsu-twg-logo.svg',
+  'assets/js/common.js', 'assets/js/register.js', 'assets/js/evaluate.js', 'assets/js/certificate.js', 'assets/js/verify.js', 'assets/img/vsu-brand-logo-horizontal.png', 'assets/img/vsu-twg-logo.svg',
   'favicon.svg', 'favicon-32.png', 'apple-touch-icon.png']) {
   await check(`${asset} loads`, () => fetchOk(asset));
 }

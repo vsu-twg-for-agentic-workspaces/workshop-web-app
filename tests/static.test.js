@@ -200,24 +200,56 @@ test('public repo hygiene: no data files, keys or spreadsheets committed', () =>
 
 test('evaluation page has every field the back end expects, with error slots', () => {
   const h = read('evaluate.html');
-  for (const f of ['email', 'improve', 'apply_areas', 'followup_optin', 'name_confirmed', 'website']) {
+  for (const f of ['email', 'improve', 'apply_areas', 'apply_areas_other', 'name_confirmed', 'website']) {
     assert.match(h, new RegExp(`name="${f}"`), 'evaluate.html missing ' + f);
   }
-  for (const f of ['email', 'apply_areas', 'name_confirmed']) assert.match(h, new RegExp(`id="${f}-error"`), f);
+  for (const f of ['email', 'apply_areas', 'apply_areas_other', 'name_confirmed']) assert.match(h, new RegExp(`id="${f}-error"`), f);
+  assert.match(h, /name="apply_areas" value="Other"/, '"Other" option under "Using what you learned"');
+  assert.doesNotMatch(h, /followup_optin|follow-up survey/i, 'the Day 30 consent checkbox was removed (follow-up is sent by hand)');
   assert.match(h, /id="ratings"/, 'rating rows are built into #ratings');
   assert.match(read('assets/js/evaluate.js'), /action: 'evaluate'/);
 });
 
-test('certificate page only asks for an email and never shows whether it is registered', () => {
+test('certificate page asks for email + full name and downloads the PDF (no email sent)', () => {
   const h = read('certificate.html');
   const fields = [...h.matchAll(/<input[^>]+name="([a-z_]+)"/g)].map((m) => m[1]).sort();
-  assert.deepEqual(fields, ['email', 'website']);
+  assert.deepEqual(fields, ['email', 'full_name', 'website']);
+  assert.match(h, /id="download-link"[^>]*download/);
+  assert.match(h, /unsigned/i, 'tells participants the downloaded copy is unsigned');
+  assert.doesNotMatch(h, /inbox|spam folder|send my certificate/i);
   const js = read('assets/js/certificate.js');
-  assert.match(js, /action: 'resend'/);
-  assert.match(js, /setText\('#done-message', res\.message\)/, 'shows the back end\'s generic answer');
+  assert.match(js, /action: 'certificate'/);
+  assert.match(js, /application\/pdf/);
 });
 
-test('home page links to all three participant pages', () => {
+test('verify page works without a workshop code and never asks for personal data', () => {
+  const h = read('verify.html');
+  const fields = [...h.matchAll(/<input[^>]+name="([a-z_]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(fields, ['ref']);
+  assert.doesNotMatch(h, /data-needs-event/);
+  const js = read('assets/js/verify.js');
+  assert.match(js, /api\.verify\(/);
+  assert.match(js, /finishLoading\(\)/, 'the loader ends without loading a workshop');
+  assert.match(read('assets/js/api.js'), /action=verify&ref=/);
+});
+
+test('registration: "Office" field with examples, examples for position, placeholders on text fields', () => {
+  const h = read('register.html');
+  assert.match(h, /<label for="college_office">Office<\/label>/);
+  for (const ex of ['Faculty of Natural and Mathematical Sciences', 'Department of Computer Science and Technology', 'Office of the Director for Quality Assurance',
+    'Administrative Aide II', 'Department dDRC', 'Research Assistant', 'Professor VI and Head, DPM']) assert.ok(h.includes(ex), ex);
+  for (const m of h.matchAll(/<input type="(?:text|email)"[^>]*>/g)) {
+    if (/name="website"/.test(m[0])) continue;
+    assert.match(m[0], /placeholder="/, 'missing placeholder: ' + m[0].slice(0, 60));
+  }
+  assert.doesNotMatch(h, /Data Protection Officer|sent by email|email your certificate/i);
+});
+
+test('no page promises an email from the app', () => {
+  for (const p of pages) assert.doesNotMatch(read(p), /certificate (?:is|will be|was) (?:sent|emailed)|sent to this address|confirmation email/i, p);
+});
+
+test('home page links to every participant page', () => {
   const h = read('index.html');
-  for (const p of ['register.html', 'evaluate.html', 'certificate.html']) assert.match(h, new RegExp(`href="${p}"`), p);
+  for (const p of ['register.html', 'evaluate.html', 'certificate.html', 'verify.html']) assert.match(h, new RegExp(`href="${p}"`), p);
 });

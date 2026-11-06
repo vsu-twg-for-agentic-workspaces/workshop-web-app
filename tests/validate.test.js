@@ -78,7 +78,7 @@ test('the cleaned data has exactly the keys the back end expects', () => {
 const goodEval = () => ({
   email: ' Juan.DelaCruz@vsu.edu.ph ',
   rating_content: '5', rating_pace: '4', rating_handouts_labs: '5', rating_facilitators: '5', rating_overall: '4',
-  improve: 'More lab time', apply_areas: ['Work', 'Personal'], followup_optin: false, name_confirmed: true,
+  improve: 'More lab time', apply_areas: ['Work', 'Personal'], name_confirmed: true,
 });
 
 test('evaluation: valid input passes; ratings become numbers; email normalized', () => {
@@ -100,16 +100,23 @@ test('evaluation: at least one application area, only allowed values kept', () =
   assert.deepEqual(V.validateEvaluation({ ...goodEval(), apply_areas: ['Work', 'Hacking'] }).data.apply_areas, ['Work']);
 });
 
-test('evaluation: name confirmation required; follow-up is optional', () => {
+test('evaluation: name confirmation required', () => {
   assert.ok(V.validateEvaluation({ ...goodEval(), name_confirmed: false }).errors.name_confirmed);
-  assert.equal(V.validateEvaluation({ ...goodEval(), followup_optin: false }).ok, true);
 });
 
-test('evaluation: lists match the back end (§11.4 Parts D–F)', () => {
+test('evaluation: "Other" needs its text; the text is dropped when Other is not ticked', () => {
+  assert.ok(V.validateEvaluation({ ...goodEval(), apply_areas: ['Other'], apply_areas_other: ' ' }).errors.apply_areas_other);
+  const ok = V.validateEvaluation({ ...goodEval(), apply_areas: ['Other'], apply_areas_other: ' Church  records ' });
+  assert.equal(ok.ok, true, JSON.stringify(ok.errors));
+  assert.equal(ok.data.apply_areas_other, 'Church records');
+  assert.equal(V.validateEvaluation({ ...goodEval(), apply_areas_other: 'stray' }).data.apply_areas_other, '');
+});
+
+test('evaluation: lists match the back end (§11.4 Parts D–E)', () => {
   assert.deepEqual(V.RATINGS.map((r) => r.name), ['rating_content', 'rating_pace', 'rating_handouts_labs', 'rating_facilitators', 'rating_overall']);
-  assert.deepEqual(V.CHOICES.APPLY_AREAS, ['Work', 'Profession', 'Hobby', 'Personal']);
+  assert.deepEqual(V.CHOICES.APPLY_AREAS, ['Work', 'Profession', 'Hobby', 'Personal', 'Other']);
   assert.deepEqual(Object.keys(V.validateEvaluation(goodEval()).data).sort(), [
-    'apply_areas', 'email', 'followup_optin', 'improve', 'name_confirmed',
+    'apply_areas', 'apply_areas_other', 'email', 'improve', 'name_confirmed',
     'rating_content', 'rating_facilitators', 'rating_handouts_labs', 'rating_overall', 'rating_pace',
   ]);
 });

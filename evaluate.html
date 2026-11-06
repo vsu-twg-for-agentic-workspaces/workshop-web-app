@@ -49,7 +49,7 @@
     <div class="notice notice-error" id="page-error" role="alert" hidden><p></p></div>
 
     <form id="eval-form" novalidate data-needs-event>
-      <p class="lead">Tell us how the workshop went. It takes about three minutes, and your certificate is emailed as soon as you submit.</p>
+      <p class="lead">Tell us how the workshop went. It takes about three minutes. Once you submit, you can download your certificate from "Check my certificate".</p>
 
       <div class="notice notice-error" id="form-errors" role="alert" tabindex="-1" hidden>
         <p><strong>Please check the following:</strong></p>
@@ -60,8 +60,8 @@
         <h2 id="who-title">Your registration</h2>
         <div class="field">
           <label for="email">Email you used to register</label>
-          <span class="hint" id="email-hint">Your certificate is sent to this address.</span>
-          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="email-hint email-error">
+          <span class="hint" id="email-hint">We use it to find your registration and attendance.</span>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="juan.delacruz@vsu.edu.ph" aria-describedby="email-hint email-error">
           <span class="field-error" id="email-error"></span>
         </div>
       </section>
@@ -74,7 +74,7 @@
 
         <div class="field">
           <label for="improve">One thing we should improve <span class="optional">(optional)</span></label>
-          <textarea id="improve" name="improve" rows="3" maxlength="1000"></textarea>
+          <textarea id="improve" name="improve" rows="3" maxlength="1000" placeholder="e.g., More time for the hands-on labs"></textarea>
         </div>
       </section>
 
@@ -87,15 +87,13 @@
           <label class="choice"><input type="checkbox" name="apply_areas" value="Profession"> Profession</label>
           <label class="choice"><input type="checkbox" name="apply_areas" value="Hobby"> Hobby</label>
           <label class="choice"><input type="checkbox" name="apply_areas" value="Personal"> Personal</label>
+          <label class="choice"><input type="checkbox" name="apply_areas" value="Other" id="apply_other" aria-controls="apply_areas_other-field"> Other</label>
           <span class="field-error" id="apply_areas-error"></span>
         </fieldset>
-
-        <!-- Part F: follow-up (optional) -->
-        <div class="field">
-          <label class="choice" for="followup_optin">
-            <input type="checkbox" id="followup_optin" name="followup_optin">
-            <span>You may contact me for a short follow-up survey after 30 days. <span class="optional">(optional)</span></span>
-          </label>
+        <div class="field" id="apply_areas_other-field" hidden>
+          <label for="apply_areas_other">Other: please specify</label>
+          <input type="text" id="apply_areas_other" name="apply_areas_other" maxlength="200" placeholder="e.g., Community or church records" aria-describedby="apply_areas_other-error">
+          <span class="field-error" id="apply_areas_other-error"></span>
         </div>
       </section>
 
@@ -105,7 +103,7 @@
         <div class="field">
           <label class="choice" for="name_confirmed">
             <input type="checkbox" id="name_confirmed" name="name_confirmed" aria-describedby="name_confirmed-error">
-            <span>The name in my registration confirmation email is correct for my certificate.</span>
+            <span>The name I registered with is correct for my certificate.</span>
           </label>
           <span class="field-error" id="name_confirmed-error"></span>
           <span class="hint">If your name is wrong, tell a facilitator before you submit.</span>
@@ -127,7 +125,7 @@
       <svg class="done-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg>
       <h2 id="done-title">Thank you!</h2>
       <p id="done-message" role="status"></p>
-      <a class="btn btn-secondary" href="certificate.html" data-keep-event>Didn't get it? Check my certificate</a>
+      <a class="btn btn-primary" href="certificate.html" data-keep-event>Check my certificate</a>
     </section>
   </main>
 
