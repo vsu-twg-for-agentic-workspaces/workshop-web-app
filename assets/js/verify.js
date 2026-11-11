@@ -62,6 +62,12 @@
     check(ref);
   });
 
+  if (api.isClosed()) {
+    page.showPageError(api.closedMessage);
+    document.getElementById('verify-form').hidden = true;
+    page.finishLoading();
+    return;
+  }
   if (api.isDemo()) document.getElementById('demo-banner').hidden = false;
   else if (api.env === 'test') document.getElementById('env-banner').hidden = false;
   page.finishLoading();
