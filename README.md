@@ -7,11 +7,11 @@ Think of this site as the **front desk**: participants register, submit the eval
 **The app sends no email.** Participants download or print their **unsigned** certificate from "Check my certificate" (email + full name). The signatories sign the printed copies in ink. Anyone can check a control number on the Verify page.
 
 ```
-Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ Google Sheet
+Participant ─▶ these pages (web host, to be chosen) ─▶ Apps Script web app ─▶ Google Sheet
 ```
 
 > [!IMPORTANT]
-> This repository is **public**. It holds only HTML, CSS and JavaScript. Never commit participant data, spreadsheets, signatures or keys. The Apps Script web app URL in `assets/js/config.js` is meant to be public: the back end re-checks every submission.
+> This repository is **private**: only facilitators and developers can see it. Once the site is published, though, anyone can open its HTML, CSS and JavaScript in a browser, so it still holds only those files. Never commit participant data, spreadsheets, signatures or keys. The Apps Script web app URL in `assets/js/config.js` is meant to be public: the back end re-checks every submission.
 
 ## Pages
 
@@ -31,8 +31,11 @@ Each workshop has its own `event_id` (set by facilitators in the Sheet), so one 
 2. Put their web app URLs (ending in `/exec`) in `assets/js/config.js`:
    - `API_URL`: the **live** back end, used by participants
    - `TEST_API_URL`: the **test** back end
-3. Turn on GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
-4. Share `https://vsu-twg-for-agentic-workspaces.github.io/workshop-web-app/?event=<event_id>`.
+3. Publish the site on a web host. The host is still to be chosen (for example, Vercel); see issue #5.
+4. Share `<site address>/?event=<event_id>`.
+
+> [!NOTE]
+> GitHub Pages is off: GitHub's free plan publishes Pages only from public repositories. The old `vsu-twg-for-agentic-workspaces.github.io/workshop-web-app/` link no longer works.
 
 ## Test and live
 
