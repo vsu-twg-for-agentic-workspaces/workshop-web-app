@@ -62,6 +62,7 @@
     }
     form.hidden = true;
     var done = document.getElementById('done');
+    if (res.demo) page.markPreviewDone(done);
     done.hidden = false;
     done.focus();
   }

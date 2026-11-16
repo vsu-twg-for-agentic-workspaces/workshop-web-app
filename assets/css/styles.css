@@ -40,6 +40,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+html { overflow-x: clip; } /* the 100vw preview bar must not add a sideways scrollbar */
+/* Keep focused fields and error boxes clear of the sticky preview bar. */
+html:has(#demo-banner:not([hidden])) { scroll-padding-top: 4rem; }
 
 body {
   margin: 0;
@@ -232,8 +235,6 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
 .notice-test strong { color: #123F8C; }
 
 .card-success { text-align: left; }
-
-html { overflow-x: clip; } /* the 100vw preview bar must not add a sideways scrollbar */
 
 /* Preview mode: a full-width bar that stays in view, so a test run is never mistaken for the real thing. */
 #demo-banner {
