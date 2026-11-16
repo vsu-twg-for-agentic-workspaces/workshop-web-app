@@ -40,7 +40,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
-html { overflow-x: clip; } /* the 100vw preview bar must not add a sideways scrollbar */
+/* The 100vw preview bar must not make the page scroll sideways. clip (not hidden) on the page wrapper,
+   not on html: on html it still lets the page shift by the scrollbar width; clip keeps the bar sticky. */
+.page-content { overflow-x: clip; }
 /* Keep focused fields and error boxes clear of the sticky preview bar. */
 html:has(#demo-banner:not([hidden])) { scroll-padding-top: 4rem; }
 
