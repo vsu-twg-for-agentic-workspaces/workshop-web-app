@@ -41,7 +41,7 @@ Each workshop has its own `event_id` (set by facilitators in the Sheet), so one 
 | The published link (participants) | **Live** (`API_URL`) | Normal page |
 | The published link + `&env=test` | **Test** (`TEST_API_URL`) | Blue "Test environment" note |
 | From your own computer (`file://` or `localhost`) | **Test** | Blue "Test environment" note |
-| The published link, with `API_URL` still empty (before go-live) | None (closed) | "This workshop is not open yet"; every form is hidden, so nothing can be submitted |
+| The published link, with `API_URL` still empty (before go-live) | None (closed) | "The workshop website is not open yet. Please try again later or contact the facilitators."; every form is hidden, so nothing can be submitted |
 | Test (`&env=test` or your own computer), with `TEST_API_URL` still empty | None (preview) | Full-width yellow "Preview mode" bar; the success card says "Preview only: nothing was saved" |
 
 The test page never falls back to the live back end, and links within the site keep `&env=test`.

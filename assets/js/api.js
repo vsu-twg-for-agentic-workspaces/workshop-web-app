@@ -32,7 +32,7 @@
     return target.env === 'test' ? 'preview' : 'closed';
   }
 
-  var CLOSED_MESSAGE = 'This workshop is not open yet. Please use the link or QR code the facilitators share on the workshop day.';
+  var CLOSED_MESSAGE = 'The workshop website is not open yet. Please try again later or contact the facilitators.';
 
   function eventIdFrom(search) {
     var id = new URLSearchParams(search || '').get('event') || '';
