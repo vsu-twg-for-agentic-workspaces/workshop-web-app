@@ -11,7 +11,9 @@ Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ 
 ```
 
 > [!IMPORTANT]
-> This repository is **public**. It holds only HTML, CSS and JavaScript. Never commit participant data, spreadsheets, signatures or keys. The Apps Script web app URL in `assets/js/config.js` is meant to be public: the back end re-checks every submission.
+> This repository is **public so that GitHub Pages can host the site**. Think of it as a shop window: anyone can look in, so only display items go there. GitHub's free plan publishes Pages only from public repositories, so **do not make it private**: that turns Pages off and takes the participant site offline (this happened on 2026-11-16, #5; it was made public again on 2026-11-18, #8).
+>
+> Because anyone can read it, it holds only HTML, CSS and JavaScript. Never commit participant data, spreadsheets, signatures or keys. The Apps Script web app URL in `assets/js/config.js` is meant to be public: the back end re-checks every submission. The back end and all facilitator materials stay in the private workshop repository.
 
 ## Pages
 
@@ -31,8 +33,9 @@ Each workshop has its own `event_id` (set by facilitators in the Sheet), so one 
 2. Put their web app URLs (ending in `/exec`) in `assets/js/config.js`:
    - `API_URL`: the **live** back end, used by participants
    - `TEST_API_URL`: the **test** back end
-3. Turn on GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
+3. Turn on GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**. After any change to the repository's visibility, open this page again: Pages may be switched off and need to be saved again.
 4. Share `https://vsu-twg-for-agentic-workspaces.github.io/workshop-web-app/?event=<event_id>`.
+5. Check the published site: `npm run test:smoke -- https://vsu-twg-for-agentic-workspaces.github.io/workshop-web-app/`. Until the live back end exists, the check that `API_URL` is set fails; every other check should pass.
 
 ## Test and live
 
