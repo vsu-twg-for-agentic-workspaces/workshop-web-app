@@ -27,8 +27,8 @@
     if (step === 1) return ['consent'];
     if (step === 2) return (audience() === 'open' ? ['affiliation'] : []).concat(['full_name', 'email']);
     return isOther()
-      ? ['organization', 'organization_type', 'college_office', 'position', 'prior_ai_use']
-      : ['campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use'];
+      ? ['organization', 'organization_type', 'college_office', 'position', 'prior_ai_use', 'laptop_os']
+      : ['campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os'];
   }
 
   function fillSelect(id, names) {
@@ -101,6 +101,7 @@
       position: fd.get('position'),
       faculty_or_staff: fd.get('faculty_or_staff') || '',
       prior_ai_use: fd.get('prior_ai_use') || '',
+      laptop_os: fd.get('laptop_os') || '',
       website: fd.get('website') || '',
     };
   }

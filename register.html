@@ -74,7 +74,7 @@
             <li>If you work at VSU: your campus, office, position, and whether you are faculty or staff</li>
             <li>For workshops open to other organizations: whether you work at VSU or at another organization</li>
             <li>If you work at another organization: your organization's name and type, and your office or unit and position</li>
-            <li>How often you have used AI tools</li>
+            <li>How often you have used AI tools, and which kind of laptop you will bring (Windows, Mac, Linux or other)</li>
             <li>Later, your workshop evaluation and attendance</li>
           </ul>
           <p>We do <strong>not</strong> ask for your birth date, home address, or ID numbers.</p>
@@ -196,6 +196,16 @@
           <label class="choice"><input type="radio" name="prior_ai_use" value="Tried"> I have tried them</label>
           <label class="choice"><input type="radio" name="prior_ai_use" value="Regularly"> I use them regularly</label>
           <span class="field-error" id="prior_ai_use-error"></span>
+        </fieldset>
+
+        <fieldset aria-describedby="laptop_os-hint laptop_os-error">
+          <legend>Which laptop will you bring to the workshop?</legend>
+          <span class="hint" id="laptop_os-hint">This tells us whether to prepare setup steps for Mac or Linux laptops.</span>
+          <label class="choice"><input type="radio" name="laptop_os" value="Windows"> Windows</label>
+          <label class="choice"><input type="radio" name="laptop_os" value="macOS"> Mac (macOS)</label>
+          <label class="choice"><input type="radio" name="laptop_os" value="Linux"> Linux</label>
+          <label class="choice"><input type="radio" name="laptop_os" value="Other"> Other or not sure</label>
+          <span class="field-error" id="laptop_os-error"></span>
         </fieldset>
 
         <!-- Honeypot: hidden from people, filled in only by bots -->
