@@ -10,6 +10,7 @@
     CAMPUS: ['VSU Main Campus', 'VSU Villaba', 'VSU Isabel', 'VSU Tolosa', 'VSU Alangalang'],
     FACULTY_OR_STAFF: ['Faculty', 'Staff'],
     PRIOR_AI_USE: ['Never', 'Tried', 'Regularly'],
+    LAPTOP_OS: ['Windows', 'macOS', 'Linux', 'Other'], // same list as the back end (#102)
     APPLY_AREAS: ['Work', 'Profession', 'Hobby', 'Personal', 'Other'],
   };
 
@@ -48,6 +49,7 @@
       position: cleanText(p.position, LIMITS.TEXT_MAX),
       faculty_or_staff: cleanText(p.faculty_or_staff, 20),
       prior_ai_use: cleanText(p.prior_ai_use, 20),
+      laptop_os: cleanText(p.laptop_os, 20),
       consent: p.consent === true,
     };
 
@@ -60,6 +62,7 @@
     if (!data.position) errors.position = 'Enter your position or designation.';
     if (CHOICES.FACULTY_OR_STAFF.indexOf(data.faculty_or_staff) === -1) errors.faculty_or_staff = 'Choose Faculty or Staff.';
     if (CHOICES.PRIOR_AI_USE.indexOf(data.prior_ai_use) === -1) errors.prior_ai_use = 'Choose one answer.';
+    if (CHOICES.LAPTOP_OS.indexOf(data.laptop_os) === -1) errors.laptop_os = 'Choose which laptop you will bring.';
 
     return { ok: Object.keys(errors).length === 0, errors: errors, data: data };
   }

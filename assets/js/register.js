@@ -14,7 +14,7 @@
   var STEP_FIELDS = {
     1: ['consent'],
     2: ['full_name', 'email'],
-    3: ['campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use'],
+    3: ['campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os'],
   };
 
   // Campus list comes from the Brand Book's official names (validate.js).
@@ -41,6 +41,7 @@
       position: fd.get('position'),
       faculty_or_staff: fd.get('faculty_or_staff') || '',
       prior_ai_use: fd.get('prior_ai_use') || '',
+      laptop_os: fd.get('laptop_os') || '',
       website: fd.get('website') || '',
     };
   }
