@@ -14,6 +14,7 @@ const good = () => ({
   position: 'Instructor I',
   faculty_or_staff: 'Faculty',
   prior_ai_use: 'Never',
+  laptop_os: 'Windows',
 });
 
 test('valid registration passes and email is normalized', () => {
@@ -26,7 +27,7 @@ test('each missing field gets its own message keyed by field name', () => {
   const r = V.validateRegistration({}, ['vsu.edu.ph']);
   assert.equal(r.ok, false);
   assert.deepEqual(Object.keys(r.errors).sort(), [
-    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'position', 'prior_ai_use',
+    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'laptop_os', 'position', 'prior_ai_use',
   ]);
 });
 
@@ -56,6 +57,7 @@ test('campus list uses Brand Book names: no hyphens, no "Campus" suffix on compo
 test('choices must come from the lists the back end accepts', () => {
   assert.ok(V.validateRegistration({ ...good(), faculty_or_staff: 'Student' }, []).errors.faculty_or_staff);
   assert.ok(V.validateRegistration({ ...good(), prior_ai_use: 'Daily' }, []).errors.prior_ai_use);
+  assert.ok(V.validateRegistration({ ...good(), laptop_os: 'Chromebook' }, []).errors.laptop_os);
   assert.deepEqual(V.CHOICES.FACULTY_OR_STAFF, ['Faculty', 'Staff']);
   assert.deepEqual(V.CHOICES.PRIOR_AI_USE, ['Never', 'Tried', 'Regularly']);
 });
@@ -69,7 +71,7 @@ test('text is cleaned and capped like the back end', () => {
 test('the cleaned data has exactly the keys the back end expects', () => {
   const r = V.validateRegistration(good(), []);
   assert.deepEqual(Object.keys(r.data).sort(), [
-    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'position', 'prior_ai_use',
+    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'laptop_os', 'position', 'prior_ai_use',
   ]);
 });
 

@@ -149,7 +149,7 @@ test('pages only link to pages that exist', () => {
 test('registration form fields match what the back end expects', () => {
   const h = read('register.html');
   const names = new Set([...h.matchAll(/name="([a-z_]+)"/g)].map((m) => m[1]));
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'website']) {
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os', 'website']) {
     assert.ok(names.has(f), 'register.html missing field ' + f);
   }
   assert.match(h, /name="website" tabindex="-1"/, 'honeypot must be skipped by keyboard users');
@@ -164,7 +164,7 @@ test('registration asks only what training-design.md §11.4 allows (no birth dat
 
 test('every field has an error slot and is described by it', () => {
   const h = read('register.html');
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use']) {
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os']) {
     assert.match(h, new RegExp(`id="${f}-error"`), f);
     assert.match(h, new RegExp(`aria-describedby="[^"]*${f}-error`), f);
   }
