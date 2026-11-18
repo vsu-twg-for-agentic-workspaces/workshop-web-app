@@ -3,7 +3,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { chooseEnvironment, eventIdFrom } = require('../assets/js/api.js');
+const { chooseEnvironment, chooseMode, eventIdFrom } = require('../assets/js/api.js');
 
 const cfg = { API_URL: 'https://script.google.com/macros/s/LIVE/exec', TEST_API_URL: 'https://script.google.com/macros/s/TEST/exec' };
 const site = (search = '') => ({ protocol: 'https:', hostname: 'vsu-twg-for-agentic-workspaces.github.io', search });
@@ -37,4 +37,19 @@ test('event codes are limited to safe characters', () => {
   assert.equal(eventIdFrom('?event=AW-2026-01'), 'AW-2026-01');
   assert.equal(eventIdFrom('?event=<script>'), '');
   assert.equal(eventIdFrom(''), '');
+});
+
+test('LIVE with no API_URL is closed, never preview: the live link must not pretend to save', () => {
+  const t = chooseEnvironment({ API_URL: '', TEST_API_URL: cfg.TEST_API_URL }, site('?event=FNMS-2026-01'));
+  assert.equal(chooseMode(t), 'closed');
+});
+
+test('TEST with no TEST_API_URL is preview (your own computer or ?env=test)', () => {
+  assert.equal(chooseMode(chooseEnvironment({ API_URL: '', TEST_API_URL: '' }, { protocol: 'file:', hostname: '', search: '' })), 'preview');
+  assert.equal(chooseMode(chooseEnvironment({ API_URL: '', TEST_API_URL: '' }, site('?env=test'))), 'preview');
+});
+
+test('any back end URL means connected', () => {
+  assert.equal(chooseMode(chooseEnvironment(cfg, site())), 'connected');
+  assert.equal(chooseMode(chooseEnvironment(cfg, site('?env=test'))), 'connected');
 });

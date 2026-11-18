@@ -40,6 +40,11 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+/* The 100vw preview bar must not make the page scroll sideways. clip (not hidden) on the page wrapper,
+   not on html: on html it still lets the page shift by the scrollbar width; clip keeps the bar sticky. */
+.page-content { overflow-x: clip; }
+/* Keep focused fields and error boxes clear of the sticky preview bar. */
+html:has(#demo-banner:not([hidden])) { scroll-padding-top: 4rem; }
 
 body {
   margin: 0;
@@ -232,6 +237,15 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
 .notice-test strong { color: #123F8C; }
 
 .card-success { text-align: left; }
+
+/* Preview mode: a full-width bar that stays in view, so a test run is never mistaken for the real thing. */
+#demo-banner {
+  position: sticky; top: 0; z-index: 10;
+  width: 100vw; margin-left: calc(50% - 50vw); border-radius: 0;
+  border-width: 0 0 2px; text-align: center;
+}
+.card-preview { text-align: left; border-color: var(--info-border); background: var(--info-bg); }
+.card-preview .done-icon { display: none; }
 .done-icon { display: block; margin-bottom: 0.75rem; fill: var(--success-bg); stroke: var(--vsu-green); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 .notice ul { margin: 0.25rem 0 0; padding-left: 1.25rem; }
 

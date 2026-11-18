@@ -184,6 +184,10 @@ test('every page has the test-environment banner', () => {
   for (const p of pages) assert.match(read(p), /id="env-banner"/, p);
 });
 
+test('every page has the page-error box, so the closed and error messages can show', () => {
+  for (const p of pages) assert.match(read(p), /id="page-error"[^>]*role="alert"/, p);
+});
+
 test('public repo hygiene: no data files, keys or spreadsheets committed', () => {
   const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
     if (['.git', 'node_modules'].includes(e.name)) return [];

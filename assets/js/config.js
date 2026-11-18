@@ -7,8 +7,9 @@
  *
  * The TEST back end is used automatically when the page is opened from your own
  * computer (file:// or localhost), or when the link ends in ?env=test.
- * Everyone else uses LIVE. If the chosen URL is empty, the pages run in preview
- * (demo) mode and save nothing.
+ * Everyone else uses LIVE. If API_URL is empty, the live pages say the workshop
+ * is not open yet and hide every form. If TEST_API_URL is empty, test pages run
+ * in preview (demo) mode and save nothing.
  *
  * Both URLs are public by design; the back end re-checks every submission.
  */

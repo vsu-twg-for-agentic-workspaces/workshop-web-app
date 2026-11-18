@@ -49,6 +49,10 @@
 
   function fetchEvent() {
     var id = window.WorkshopApi.eventIdFromUrl();
+    if (window.WorkshopApi.isClosed()) {
+      showPageError(window.WorkshopApi.closedMessage);
+      return Promise.resolve(null);
+    }
     if (!id && !window.WorkshopApi.isDemo()) {
       showPageError('This link is missing the workshop code. Please use the link or QR code from the facilitators.');
       return Promise.resolve(null);
@@ -74,5 +78,16 @@
     });
   }
 
-  window.WorkshopPage = { $: $, setText: setText, loadEvent: loadEvent, showPageError: showPageError, finishLoading: finishLoading };
+  /**
+   * Preview mode only: turn the success card into a plain "nothing was saved" card,
+   * so a test run is never mistaken for a real registration or evaluation.
+   */
+  function markPreviewDone(done) {
+    setText('#done-title', 'Preview only: nothing was saved');
+    done.classList.remove('card-success');
+    done.classList.add('card-preview');
+    done.querySelectorAll('[data-hide-in-preview]').forEach(function (el) { el.hidden = true; });
+  }
+
+  window.WorkshopPage = { $: $, setText: setText, markPreviewDone: markPreviewDone, loadEvent: loadEvent, showPageError: showPageError, finishLoading: finishLoading };
 })();

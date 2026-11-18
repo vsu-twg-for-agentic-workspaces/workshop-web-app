@@ -20,18 +20,33 @@
       : { env: 'live', url: cfg.API_URL || '' };
   }
 
+  /**
+   * What the pages may do. Pure function, so it can be unit-tested.
+   *   'connected'  a back end URL is set: save for real
+   *   'preview'    TEST with no URL (your own computer or ?env=test): demo data, nothing saved
+   *   'closed'     LIVE with no URL (before go-live): show "not open yet" and block every form,
+   *                so a participant never sees a fake "you are registered"
+   */
+  function chooseMode(target) {
+    if (target.url) return 'connected';
+    return target.env === 'test' ? 'preview' : 'closed';
+  }
+
+  var CLOSED_MESSAGE = 'The workshop website is not open yet. Please try again later or contact the facilitators.';
+
   function eventIdFrom(search) {
     var id = new URLSearchParams(search || '').get('event') || '';
     return /^[A-Za-z0-9-]{1,40}$/.test(id) ? id : '';
   }
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { chooseEnvironment: chooseEnvironment, eventIdFrom: eventIdFrom };
+    module.exports = { chooseEnvironment: chooseEnvironment, chooseMode: chooseMode, eventIdFrom: eventIdFrom, CLOSED_MESSAGE: CLOSED_MESSAGE };
   }
   if (typeof window === 'undefined') return;
 
   var cfg = window.WORKSHOP_CONFIG || {};
   var target = chooseEnvironment(cfg, window.location);
+  var mode = chooseMode(target);
   var DEMO_EVENT = {
     event_id: 'DEMO',
     title: 'Capacity Building in Using AI Agents and Workflows in the University',
@@ -42,7 +57,15 @@
   };
 
   function isDemo() {
-    return !target.url;
+    return mode === 'preview';
+  }
+
+  function isClosed() {
+    return mode === 'closed';
+  }
+
+  function closedResult() {
+    return Promise.resolve({ ok: false, closed: true, errors: [CLOSED_MESSAGE] });
   }
 
   function withTimeout(promise, ms) {
@@ -59,6 +82,7 @@
   }
 
   function getEvent(eventId) {
+    if (isClosed()) return closedResult();
     if (isDemo()) return Promise.resolve({ ok: true, event: Object.assign({}, DEMO_EVENT, { event_id: eventId || 'DEMO' }), demo: true });
     var url = target.url + '?action=event&event=' + encodeURIComponent(eventId || '');
     return withTimeout(fetch(url, { redirect: 'follow' }), 20000)
@@ -68,6 +92,7 @@
 
   /** Verify page: is this control number genuine? Needs no workshop code. */
   function verify(ref) {
+    if (isClosed()) return closedResult();
     if (isDemo()) {
       return Promise.resolve({
         ok: true, demo: true,
@@ -81,10 +106,11 @@
   }
 
   function post(body) {
+    if (isClosed()) return closedResult();
     if (isDemo()) {
       return new Promise(function (resolve) {
         setTimeout(function () {
-          resolve({ ok: true, demo: true, message: 'Preview mode: nothing was saved.' });
+          resolve({ ok: true, demo: true, message: 'This page is not connected to the workshop system, so nothing you entered was saved.' });
         }, 600);
       });
     }
@@ -104,6 +130,8 @@
     verify: verify,
     post: post,
     isDemo: isDemo,
+    isClosed: isClosed,
+    closedMessage: CLOSED_MESSAGE,
     eventIdFromUrl: function () { return eventIdFrom(window.location.search); },
   };
 })(typeof window !== 'undefined' ? window : this);
