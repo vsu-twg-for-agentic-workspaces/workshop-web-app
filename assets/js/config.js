@@ -13,8 +13,8 @@
  * Both URLs are public by design; the back end re-checks every submission.
  */
 window.WORKSHOP_CONFIG = {
-  API_URL: '',
-  TEST_API_URL: 'https://script.google.com/macros/s/AKfycbz7EPbx7bE18oNFhOvdZCRhxq6CqInrUI0MT_bgGbBp3OPEYa_2bgxE3RRLAwZT5abGgg/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbz7EPbx7bE18oNFhOvdZCRhxq6CqInrUI0MT_bgGbBp3OPEYa_2bgxE3RRLAwZT5abGgg/exec',
+  TEST_API_URL: '',
   ALLOWED_EMAIL_DOMAINS: ['vsu.edu.ph'],
   SUPPORT_EMAIL: '',
 };
