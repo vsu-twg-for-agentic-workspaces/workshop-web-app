@@ -11,6 +11,16 @@
     FACULTY_OR_STAFF: ['Faculty', 'Staff'],
     PRIOR_AI_USE: ['Never', 'Tried', 'Regularly'],
     APPLY_AREAS: ['Work', 'Profession', 'Hobby', 'Personal', 'Other'],
+    // #114: on a workshop open to other organizations (audience "open").
+    AFFILIATION: ['VSU', 'Other'],
+    ORGANIZATION_TYPE: [
+      'LGU or government agency',
+      'SUC or other higher education institution',
+      'Basic education (DepEd)',
+      'Private sector',
+      'NGO',
+      'Other',
+    ],
   };
 
   var LIMITS = { NAME_MAX: 120, TEXT_MAX: 200, IMPROVE_MAX: 1000, OTHER_MAX: 200 };
@@ -36,29 +46,57 @@
   /**
    * Returns { ok, errors: { field: message }, data } for the registration form.
    * Error keys match the form field names so each message shows under its field.
+   *
+   * audience (#114): 'open' when the workshop also accepts attendees from other
+   * organizations; anything else is a VSU-only workshop, checked exactly as
+   * before and sending exactly the same fields. On an open workshop the
+   * attendee chooses an affiliation: VSU attendees keep the same checks;
+   * attendees from another organization give the organization name and type
+   * instead of campus and Faculty/Staff, and may use any valid email.
    */
-  function validateRegistration(input, allowedDomains) {
+  function validateRegistration(input, allowedDomains, audience) {
     var p = input || {};
     var errors = {};
+    var open = audience === 'open';
+    var affiliation = open ? cleanText(p.affiliation, 20) : 'VSU';
+    var known = CHOICES.AFFILIATION.indexOf(affiliation) !== -1;
+    var other = affiliation === 'Other';
     var data = {
       email: normalizeEmail(p.email),
       full_name: cleanText(p.full_name, LIMITS.NAME_MAX),
-      campus: cleanText(p.campus, LIMITS.TEXT_MAX),
+      campus: other ? '' : cleanText(p.campus, LIMITS.TEXT_MAX),
       college_office: cleanText(p.college_office, LIMITS.TEXT_MAX),
       position: cleanText(p.position, LIMITS.TEXT_MAX),
-      faculty_or_staff: cleanText(p.faculty_or_staff, 20),
+      faculty_or_staff: other ? '' : cleanText(p.faculty_or_staff, 20),
       prior_ai_use: cleanText(p.prior_ai_use, 20),
       consent: p.consent === true,
     };
+    if (open) {
+      data.affiliation = affiliation;
+      data.organization = other ? cleanText(p.organization, LIMITS.TEXT_MAX) : '';
+      data.organization_type = other ? cleanText(p.organization_type, LIMITS.TEXT_MAX) : '';
+    }
 
     if (!data.consent) errors.consent = 'Please agree to the privacy notice to continue.';
+    if (open && !known) errors.affiliation = 'Choose Visayas State University or Another organization.';
     if (data.full_name.length < 3) errors.full_name = 'Enter your full name as it should appear on your certificate.';
-    if (!isValidEmail(data.email)) errors.email = 'Enter a valid email address, like juan.delacruz@vsu.edu.ph.';
-    else if (!domainAllowed(data.email, allowedDomains)) errors.email = 'Use your institutional email address (' + allowedDomains.join(', ') + ').';
-    if (CHOICES.CAMPUS.indexOf(data.campus) === -1) errors.campus = 'Choose your campus.';
-    if (!data.college_office) errors.college_office = 'Enter your office.';
+    if (!isValidEmail(data.email)) {
+      errors.email = other
+        ? 'Enter a valid email address, like juan.delacruz@example.com.'
+        : 'Enter a valid email address, like juan.delacruz@vsu.edu.ph.';
+    } else if (!other && !domainAllowed(data.email, allowedDomains)) {
+      errors.email = 'Use your institutional email address (' + allowedDomains.join(', ') + ').' +
+        (open ? ' Not from VSU? Choose "Another organization" above.' : '');
+    }
+    if (other) {
+      if (!data.organization) errors.organization = 'Enter the name of your organization.';
+      if (CHOICES.ORGANIZATION_TYPE.indexOf(data.organization_type) === -1) errors.organization_type = 'Choose your organization type.';
+    } else if (CHOICES.CAMPUS.indexOf(data.campus) === -1) {
+      errors.campus = 'Choose your campus.';
+    }
+    if (!data.college_office) errors.college_office = other ? 'Enter your office or unit.' : 'Enter your office.';
     if (!data.position) errors.position = 'Enter your position or designation.';
-    if (CHOICES.FACULTY_OR_STAFF.indexOf(data.faculty_or_staff) === -1) errors.faculty_or_staff = 'Choose Faculty or Staff.';
+    if (!other && CHOICES.FACULTY_OR_STAFF.indexOf(data.faculty_or_staff) === -1) errors.faculty_or_staff = 'Choose Faculty or Staff.';
     if (CHOICES.PRIOR_AI_USE.indexOf(data.prior_ai_use) === -1) errors.prior_ai_use = 'Choose one answer.';
 
     return { ok: Object.keys(errors).length === 0, errors: errors, data: data };

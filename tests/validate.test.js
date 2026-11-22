@@ -73,6 +73,77 @@ test('the cleaned data has exactly the keys the back end expects', () => {
   ]);
 });
 
+// ---------- #114: attendees from other organizations ----------
+
+const guest = () => ({
+  consent: true,
+  affiliation: 'Other',
+  full_name: 'Sample Guest',
+  email: ' Sample.Guest@Gmail.com ',
+  organization: 'Sample City Government',
+  organization_type: 'LGU or government agency',
+  college_office: 'Sample Planning Office',
+  position: 'Sample Officer II',
+  prior_ai_use: 'Tried',
+});
+
+test('vsu_only (#114): unchanged checks, and the same keys are sent as before', () => {
+  for (const audience of [undefined, 'vsu_only', 'anything']) {
+    const r = V.validateRegistration(good(), ['vsu.edu.ph'], audience);
+    assert.equal(r.ok, true, JSON.stringify(r.errors));
+    assert.ok(!('affiliation' in r.data), 'no affiliation sent on a VSU-only workshop');
+  }
+  // Organization answers cannot get a Gmail address past a VSU-only workshop.
+  const r = V.validateRegistration(guest(), ['vsu.edu.ph'], 'vsu_only');
+  assert.equal(r.errors.email, 'Use your institutional email address (vsu.edu.ph).');
+  assert.ok(r.errors.campus && r.errors.faculty_or_staff);
+  assert.ok(!r.errors.affiliation);
+});
+
+test('open (#114): an attendee from another organization passes with any valid email', () => {
+  const r = V.validateRegistration(guest(), ['vsu.edu.ph'], 'open');
+  assert.equal(r.ok, true, JSON.stringify(r.errors));
+  assert.equal(r.data.email, 'sample.guest@gmail.com');
+  assert.equal(r.data.affiliation, 'Other');
+  assert.equal(r.data.organization, 'Sample City Government');
+  assert.equal(r.data.campus, '');
+  assert.equal(r.data.faculty_or_staff, '');
+  assert.deepEqual(Object.keys(r.data).sort(), [
+    'affiliation', 'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name',
+    'organization', 'organization_type', 'position', 'prior_ai_use',
+  ]);
+  assert.match(V.validateRegistration({ ...guest(), email: 'nope' }, [], 'open').errors.email, /example\.com/);
+});
+
+test('open (#114): organization name and an allowed type are required for other organizations', () => {
+  const r = V.validateRegistration({ ...guest(), organization: ' ', organization_type: 'Club', college_office: '', position: '' }, [], 'open');
+  assert.deepEqual(Object.keys(r.errors).sort(), ['college_office', 'organization', 'organization_type', 'position']);
+  assert.match(r.errors.college_office, /office or unit/);
+  for (const t of V.CHOICES.ORGANIZATION_TYPE) assert.equal(V.validateRegistration({ ...guest(), organization_type: t }, [], 'open').ok, true, t);
+});
+
+test('open (#114): a VSU attendee keeps campus, Faculty/Staff and the domain check', () => {
+  const vsu = { ...good(), affiliation: 'VSU' };
+  assert.equal(V.validateRegistration(vsu, ['vsu.edu.ph'], 'open').ok, true);
+  const r = V.validateRegistration({ ...vsu, email: 'a@gmail.com', campus: '', faculty_or_staff: '' }, ['vsu.edu.ph'], 'open');
+  assert.match(r.errors.email, /institutional email address \(vsu\.edu\.ph\)\. Not from VSU\? Choose "Another organization" above\./);
+  assert.ok(r.errors.campus && r.errors.faculty_or_staff);
+});
+
+test('open (#114): the affiliation must be chosen', () => {
+  for (const a of ['', 'Elsewhere']) {
+    assert.ok(V.validateRegistration({ ...good(), affiliation: a }, ['vsu.edu.ph'], 'open').errors.affiliation, a);
+  }
+});
+
+test('open (#114): lists match the back end (Config.gs CHOICES)', () => {
+  assert.deepEqual(V.CHOICES.AFFILIATION, ['VSU', 'Other']);
+  assert.deepEqual(V.CHOICES.ORGANIZATION_TYPE, [
+    'LGU or government agency', 'SUC or other higher education institution', 'Basic education (DepEd)',
+    'Private sector', 'NGO', 'Other',
+  ]);
+});
+
 // ---------- Evaluation ----------
 
 const goodEval = () => ({

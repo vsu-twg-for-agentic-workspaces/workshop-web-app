@@ -39,6 +39,7 @@
     dates: 'Sample dates',
     venue: 'Sample venue',
     status: 'open',
+    audience: 'vsu_only',
   };
 
   function isDemo() {
@@ -59,7 +60,11 @@
   }
 
   function getEvent(eventId) {
-    if (isDemo()) return Promise.resolve({ ok: true, event: Object.assign({}, DEMO_EVENT, { event_id: eventId || 'DEMO' }), demo: true });
+    if (isDemo()) {
+      // Preview only: add &audience=open to the link to see the form for a workshop open to other organizations (#114).
+      var audience = new URLSearchParams(window.location.search).get('audience') === 'open' ? 'open' : 'vsu_only';
+      return Promise.resolve({ ok: true, event: Object.assign({}, DEMO_EVENT, { event_id: eventId || 'DEMO', audience: audience }), demo: true });
+    }
     var url = target.url + '?action=event&event=' + encodeURIComponent(eventId || '');
     return withTimeout(fetch(url, { redirect: 'follow' }), 20000)
       .then(function (r) { return r.json(); })
