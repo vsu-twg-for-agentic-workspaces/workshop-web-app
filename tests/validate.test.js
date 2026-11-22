@@ -14,6 +14,7 @@ const good = () => ({
   position: 'Instructor I',
   faculty_or_staff: 'Faculty',
   prior_ai_use: 'Never',
+  laptop_os: 'Windows',
 });
 
 test('valid registration passes and email is normalized', () => {
@@ -26,7 +27,7 @@ test('each missing field gets its own message keyed by field name', () => {
   const r = V.validateRegistration({}, ['vsu.edu.ph']);
   assert.equal(r.ok, false);
   assert.deepEqual(Object.keys(r.errors).sort(), [
-    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'position', 'prior_ai_use',
+    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'laptop_os', 'position', 'prior_ai_use',
   ]);
 });
 
@@ -56,8 +57,12 @@ test('campus list uses Brand Book names: no hyphens, no "Campus" suffix on compo
 test('choices must come from the lists the back end accepts', () => {
   assert.ok(V.validateRegistration({ ...good(), faculty_or_staff: 'Student' }, []).errors.faculty_or_staff);
   assert.ok(V.validateRegistration({ ...good(), prior_ai_use: 'Daily' }, []).errors.prior_ai_use);
+  assert.ok(V.validateRegistration({ ...good(), laptop_os: 'Chromebook' }, []).errors.laptop_os);
   assert.deepEqual(V.CHOICES.FACULTY_OR_STAFF, ['Faculty', 'Staff']);
   assert.deepEqual(V.CHOICES.PRIOR_AI_USE, ['Never', 'Tried', 'Regularly']);
+  // #102: the back end's CHOICES.LAPTOP_OS (Config.gs); it refuses any other value.
+  assert.deepEqual(V.CHOICES.LAPTOP_OS, ['Windows', 'macOS', 'Linux', 'Other']);
+  for (const os of V.CHOICES.LAPTOP_OS) assert.equal(V.validateRegistration({ ...good(), laptop_os: os }, []).ok, true, os);
 });
 
 test('text is cleaned and capped like the back end', () => {
@@ -69,7 +74,7 @@ test('text is cleaned and capped like the back end', () => {
 test('the cleaned data has exactly the keys the back end expects', () => {
   const r = V.validateRegistration(good(), []);
   assert.deepEqual(Object.keys(r.data).sort(), [
-    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'position', 'prior_ai_use',
+    'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name', 'laptop_os', 'position', 'prior_ai_use',
   ]);
 });
 
@@ -85,6 +90,7 @@ const guest = () => ({
   college_office: 'Sample Planning Office',
   position: 'Sample Officer II',
   prior_ai_use: 'Tried',
+  laptop_os: 'Windows',
 });
 
 test('vsu_only (#114): unchanged checks, and the same keys are sent as before', () => {
@@ -110,7 +116,7 @@ test('open (#114): an attendee from another organization passes with any valid e
   assert.equal(r.data.faculty_or_staff, '');
   assert.deepEqual(Object.keys(r.data).sort(), [
     'affiliation', 'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name',
-    'organization', 'organization_type', 'position', 'prior_ai_use',
+    'laptop_os', 'organization', 'organization_type', 'position', 'prior_ai_use',
   ]);
   assert.match(V.validateRegistration({ ...guest(), email: 'nope' }, [], 'open').errors.email, /example\.com/);
 });
@@ -119,6 +125,8 @@ test('open (#114): organization name and an allowed type are required for other 
   const r = V.validateRegistration({ ...guest(), organization: ' ', organization_type: 'Club', college_office: '', position: '' }, [], 'open');
   assert.deepEqual(Object.keys(r.errors).sort(), ['college_office', 'organization', 'organization_type', 'position']);
   assert.match(r.errors.college_office, /office or unit/);
+  // #102: the laptop question applies to attendees from other organizations too.
+  assert.ok(V.validateRegistration({ ...guest(), laptop_os: '' }, [], 'open').errors.laptop_os);
   for (const t of V.CHOICES.ORGANIZATION_TYPE) assert.equal(V.validateRegistration({ ...guest(), organization_type: t }, [], 'open').ok, true, t);
 });
 

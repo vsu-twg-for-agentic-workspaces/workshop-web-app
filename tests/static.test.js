@@ -149,7 +149,7 @@ test('pages only link to pages that exist', () => {
 test('registration form fields match what the back end expects', () => {
   const h = read('register.html');
   const names = new Set([...h.matchAll(/name="([a-z_]+)"/g)].map((m) => m[1]));
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'website',
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os', 'website',
     'affiliation', 'organization', 'organization_type']) {
     assert.ok(names.has(f), 'register.html missing field ' + f);
   }
@@ -165,7 +165,7 @@ test('registration asks only what training-design.md §11.4 allows (no birth dat
 
 test('every field has an error slot and is described by it', () => {
   const h = read('register.html');
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use',
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'laptop_os',
     'affiliation', 'organization', 'organization_type']) {
     assert.match(h, new RegExp(`id="${f}-error"`), f);
     assert.match(h, new RegExp(`aria-describedby="[^"]*${f}-error`), f);
@@ -287,4 +287,16 @@ test('registration (#114): the page reads the workshop audience and sends it to 
   assert.match(js, /currentEvent\.audience === 'open'/);
   assert.equal((js.match(/validateRegistration\(readForm\(\), cfg\.ALLOWED_EMAIL_DOMAINS \|\| \[\], audience\(\)\)/g) || []).length, 2);
   assert.match(js, /fillSelect\('organization_type', V\.CHOICES\.ORGANIZATION_TYPE\)/);
+});
+
+test('registration (#102, #114): step 3 checks the laptop question for VSU attendees and attendees from other organizations', () => {
+  const js = read('assets/js/register.js');
+  const step3 = js.slice(js.indexOf('return isOther()'), js.indexOf('function fillSelect'));
+  assert.equal((step3.match(/'laptop_os'/g) || []).length, 2);
+});
+
+test('registration (#102): the laptop choices on the page are exactly the values the back end accepts', () => {
+  const h = read('register.html');
+  const values = [...h.matchAll(/name="laptop_os" value="([^"]*)"/g)].map((m) => m[1]);
+  assert.deepEqual(values, ['Windows', 'macOS', 'Linux', 'Other']);
 });
