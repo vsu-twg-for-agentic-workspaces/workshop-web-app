@@ -14,7 +14,7 @@
  */
 window.WORKSHOP_CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbz7EPbx7bE18oNFhOvdZCRhxq6CqInrUI0MT_bgGbBp3OPEYa_2bgxE3RRLAwZT5abGgg/exec',
-  TEST_API_URL: '',
+  TEST_API_URL: 'https://script.google.com/macros/s/AKfycbx6qRa7ZlN-0Ye9bSY84YqOvWEJplR0v-ff6Z2sd0xReDyhlABdPWIaMwk_3pjJLxCi/exec',
   ALLOWED_EMAIL_DOMAINS: ['vsu.edu.ph'],
   SUPPORT_EMAIL: '',
 };
