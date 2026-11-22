@@ -60,6 +60,9 @@ test('choices must come from the lists the back end accepts', () => {
   assert.ok(V.validateRegistration({ ...good(), laptop_os: 'Chromebook' }, []).errors.laptop_os);
   assert.deepEqual(V.CHOICES.FACULTY_OR_STAFF, ['Faculty', 'Staff']);
   assert.deepEqual(V.CHOICES.PRIOR_AI_USE, ['Never', 'Tried', 'Regularly']);
+  // #102: the back end's CHOICES.LAPTOP_OS (Config.gs); it refuses any other value.
+  assert.deepEqual(V.CHOICES.LAPTOP_OS, ['Windows', 'macOS', 'Linux', 'Other']);
+  for (const os of V.CHOICES.LAPTOP_OS) assert.equal(V.validateRegistration({ ...good(), laptop_os: os }, []).ok, true, os);
 });
 
 test('text is cleaned and capped like the back end', () => {

@@ -294,3 +294,9 @@ test('registration (#102, #114): step 3 checks the laptop question for VSU atten
   const step3 = js.slice(js.indexOf('return isOther()'), js.indexOf('function fillSelect'));
   assert.equal((step3.match(/'laptop_os'/g) || []).length, 2);
 });
+
+test('registration (#102): the laptop choices on the page are exactly the values the back end accepts', () => {
+  const h = read('register.html');
+  const values = [...h.matchAll(/name="laptop_os" value="([^"]*)"/g)].map((m) => m[1]);
+  assert.deepEqual(values, ['Windows', 'macOS', 'Linux', 'Other']);
+});
