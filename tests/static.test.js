@@ -276,7 +276,8 @@ test('registration (#114): the privacy notice covers attendees from other organi
   const notice = h.slice(h.indexOf('<div class="privacy">'), h.indexOf('id="consent"'));
   assert.match(notice, /whether you work at VSU or at another organization/);
   assert.match(notice, /Your full name and email, for your certificate/);
-  assert.match(notice, /your organization's name and type, and your office or unit and position/);
+  assert.match(notice, /For workshops open to other organizations: whether you work at VSU or at another organization/);
+  assert.match(notice, /If you work at another organization: your organization's name and type, and your office or unit and position/);
   assert.match(notice, /If you work at VSU: your campus, office, position, and whether you are faculty or staff/);
   assert.doesNotMatch(notice, /institutional email/);
 });
