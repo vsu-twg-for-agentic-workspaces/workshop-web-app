@@ -149,7 +149,8 @@ test('pages only link to pages that exist', () => {
 test('registration form fields match what the back end expects', () => {
   const h = read('register.html');
   const names = new Set([...h.matchAll(/name="([a-z_]+)"/g)].map((m) => m[1]));
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'website']) {
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use', 'website',
+    'affiliation', 'organization', 'organization_type']) {
     assert.ok(names.has(f), 'register.html missing field ' + f);
   }
   assert.match(h, /name="website" tabindex="-1"/, 'honeypot must be skipped by keyboard users');
@@ -164,7 +165,8 @@ test('registration asks only what training-design.md §11.4 allows (no birth dat
 
 test('every field has an error slot and is described by it', () => {
   const h = read('register.html');
-  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use']) {
+  for (const f of ['consent', 'full_name', 'email', 'campus', 'college_office', 'position', 'faculty_or_staff', 'prior_ai_use',
+    'affiliation', 'organization', 'organization_type']) {
     assert.match(h, new RegExp(`id="${f}-error"`), f);
     assert.match(h, new RegExp(`aria-describedby="[^"]*${f}-error`), f);
   }
@@ -235,7 +237,7 @@ test('verify page works without a workshop code and never asks for personal data
 
 test('registration: "Office" field with examples, examples for position, placeholders on text fields', () => {
   const h = read('register.html');
-  assert.match(h, /<label for="college_office">Office<\/label>/);
+  assert.match(h, /<label for="college_office"[^>]*>Office<\/label>/);
   for (const ex of ['Faculty of Natural and Mathematical Sciences', 'Department of Computer Science and Technology', 'Office of the Director for Quality Assurance',
     'Administrative Aide II', 'Department dDRC', 'Research Assistant', 'Professor VI and Head, DPM']) assert.ok(h.includes(ex), ex);
   for (const m of h.matchAll(/<input type="(?:text|email)"[^>]*>/g)) {
@@ -252,4 +254,36 @@ test('no page promises an email from the app', () => {
 test('home page links to every participant page', () => {
   const h = read('index.html');
   for (const p of ['register.html', 'evaluate.html', 'certificate.html', 'verify.html']) assert.match(h, new RegExp(`href="${p}"`), p);
+});
+
+// ---------- #114: attendees from other organizations ----------
+
+test('registration (#114): the affiliation question and organization fields start hidden, so a VSU-only workshop looks as before', () => {
+  const h = read('register.html');
+  assert.match(h, /<div id="affiliation-group" hidden>/);
+  assert.match(h, /<div data-for="other" hidden>/);
+  assert.match(h, /value="VSU"> Visayas State University/);
+  assert.match(h, /value="Other"> Another organization/);
+  // Campus and faculty or staff are VSU-only questions.
+  assert.match(h, /<div class="field" data-for="vsu">\s*<label for="campus">/);
+  assert.match(h, /<div data-for="vsu">\s*<fieldset aria-describedby="faculty_or_staff-error">/);
+  // The affiliation comes before the email, because the email rule depends on it.
+  assert.ok(h.indexOf('name="affiliation"') < h.indexOf('name="email"'));
+});
+
+test('registration (#114): the privacy notice covers attendees from other organizations and lists the new fields', () => {
+  const h = read('register.html');
+  const notice = h.slice(h.indexOf('<div class="privacy">'), h.indexOf('id="consent"'));
+  assert.match(notice, /whether you work at VSU or at another organization/);
+  assert.match(notice, /Your full name and email, for your certificate/);
+  assert.match(notice, /your organization's name and type, and your office or unit and position/);
+  assert.match(notice, /If you work at VSU: your campus, office, position, and whether you are faculty or staff/);
+  assert.doesNotMatch(notice, /institutional email/);
+});
+
+test('registration (#114): the page reads the workshop audience and sends it to the checks', () => {
+  const js = read('assets/js/register.js');
+  assert.match(js, /currentEvent\.audience === 'open'/);
+  assert.equal((js.match(/validateRegistration\(readForm\(\), cfg\.ALLOWED_EMAIL_DOMAINS \|\| \[\], audience\(\)\)/g) || []).length, 2);
+  assert.match(js, /fillSelect\('organization_type', V\.CHOICES\.ORGANIZATION_TYPE\)/);
 });

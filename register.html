@@ -67,11 +67,13 @@
         <p>Before you register, please read how we handle your information. It takes about one minute.</p>
         <div class="privacy">
           <h3>Who collects your information</h3>
-          <p>The facilitators of the TWG for Agentic Workspaces, Visayas State University, for the workshop shown above.</p>
+          <p>The facilitators of the TWG for Agentic Workspaces, Visayas State University, for the workshop shown above. This applies to every participant, whether you work at VSU or at another organization.</p>
           <h3>What we collect</h3>
           <ul>
-            <li>Your full name and institutional email, for your certificate</li>
-            <li>Your campus, office, position, whether you are faculty or staff, and how often you have used AI tools</li>
+            <li>Your full name and email, for your certificate</li>
+            <li>If you work at VSU: your campus, office, position, and whether you are faculty or staff</li>
+            <li>If you work at another organization (for workshops open to other organizations): whether you are from VSU or another organization, your organization's name and type, and your office or unit and position</li>
+            <li>How often you have used AI tools</li>
             <li>Later, your workshop evaluation and attendance</li>
           </ul>
           <p>We do <strong>not</strong> ask for your birth date, home address, or ID numbers.</p>
@@ -104,6 +106,16 @@
       <section class="card" data-step="2" aria-labelledby="s2-title" hidden>
         <h2 id="s2-title">Certificate details</h2>
 
+        <!-- Affiliation (#114): shown only for workshops open to other organizations -->
+        <div id="affiliation-group" hidden>
+          <fieldset aria-describedby="affiliation-error">
+            <legend>Where do you work?</legend>
+            <label class="choice"><input type="radio" name="affiliation" value="VSU"> Visayas State University</label>
+            <label class="choice"><input type="radio" name="affiliation" value="Other"> Another organization (for example, an LGU, a school or an agency)</label>
+            <span class="field-error" id="affiliation-error"></span>
+          </fieldset>
+        </div>
+
         <div class="field">
           <label for="full_name">Full name</label>
           <span class="hint" id="full_name-hint">Exactly as it should appear on your certificate, e.g., Juan A. Dela Cruz</span>
@@ -112,7 +124,7 @@
         </div>
 
         <div class="field">
-          <label for="email">Institutional email</label>
+          <label for="email" id="email-label">Institutional email</label>
           <span class="hint" id="email-hint">You will use this email, with your full name, to download your certificate.</span>
           <input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="juan.delacruz@vsu.edu.ph" aria-describedby="email-hint email-error">
           <span class="field-error" id="email-error"></span>
@@ -128,7 +140,7 @@
       <section class="card" data-step="3" aria-labelledby="s3-title" hidden>
         <h2 id="s3-title">About you</h2>
 
-        <div class="field">
+        <div class="field" data-for="vsu">
           <label for="campus">Campus</label>
           <select id="campus" name="campus" required aria-describedby="campus-error">
             <option value="">Choose your campus</option>
@@ -136,8 +148,26 @@
           <span class="field-error" id="campus-error"></span>
         </div>
 
+        <!-- Attendees from other organizations (#114) -->
+        <div data-for="other" hidden>
+          <div class="field">
+            <label for="organization">Organization</label>
+            <span class="hint" id="organization-hint">The full name of your office or institution, e.g., City Government of Baybay, Department of Education Baybay City Division, or a company or NGO</span>
+            <input type="text" id="organization" name="organization" autocomplete="organization" maxlength="200" placeholder="City Government of Baybay" aria-describedby="organization-hint organization-error">
+            <span class="field-error" id="organization-error"></span>
+          </div>
+
+          <div class="field">
+            <label for="organization_type">Type of organization</label>
+            <select id="organization_type" name="organization_type" aria-describedby="organization_type-error">
+              <option value="">Choose the type</option>
+            </select>
+            <span class="field-error" id="organization_type-error"></span>
+          </div>
+        </div>
+
         <div class="field">
-          <label for="college_office">Office</label>
+          <label for="college_office" id="college_office-label">Office</label>
           <span class="hint" id="college_office-hint">e.g., Faculty of Natural and Mathematical Sciences, Department of Computer Science and Technology, or Office of the Director for Quality Assurance</span>
           <input type="text" id="college_office" name="college_office" maxlength="200" required placeholder="Department of Computer Science and Technology" aria-describedby="college_office-hint college_office-error">
           <span class="field-error" id="college_office-error"></span>
@@ -150,12 +180,14 @@
           <span class="field-error" id="position-error"></span>
         </div>
 
-        <fieldset aria-describedby="faculty_or_staff-error">
-          <legend>Are you faculty or staff?</legend>
-          <label class="choice"><input type="radio" name="faculty_or_staff" value="Faculty"> Faculty</label>
-          <label class="choice"><input type="radio" name="faculty_or_staff" value="Staff"> Staff</label>
-          <span class="field-error" id="faculty_or_staff-error"></span>
-        </fieldset>
+        <div data-for="vsu">
+          <fieldset aria-describedby="faculty_or_staff-error">
+            <legend>Are you faculty or staff?</legend>
+            <label class="choice"><input type="radio" name="faculty_or_staff" value="Faculty"> Faculty</label>
+            <label class="choice"><input type="radio" name="faculty_or_staff" value="Staff"> Staff</label>
+            <span class="field-error" id="faculty_or_staff-error"></span>
+          </fieldset>
+        </div>
 
         <fieldset aria-describedby="prior_ai_use-error">
           <legend>Before this workshop, how often did you use AI tools (such as ChatGPT, Gemini or Copilot)?</legend>

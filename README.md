@@ -25,6 +25,17 @@ Participant ─▶ these pages (GitHub Pages) ─▶ Apps Script web app ─▶ 
 
 Each workshop has its own `event_id` (set by facilitators in the Sheet), so one site serves every workshop.
 
+### Workshops open to other organizations
+
+Each workshop also has an **audience**, set by facilitators in the Sheet (workshop repo issue #114):
+
+| Audience | Registration page |
+|---|---|
+| `vsu_only` (the default) | Exactly as before: institutional email, VSU campus, office, position, faculty or staff |
+| `open` (extension-program workshops) | First asks **Where do you work?**: *Visayas State University* or *Another organization*. VSU attendees see the same questions as above. Attendees from another organization (for example, an LGU) give the organization name and type, office or unit and position, may use any valid email, and skip campus and faculty or staff |
+
+The page learns the audience from the workshop details the back end sends. In preview mode (no back end), add `&audience=open` to the link to see the open form. The back end re-checks every answer, including the email rule.
+
 ## Setup
 
 1. Deploy the two Apps Script back ends, **test** and **live** (see the workshop repo's `web-app/README.md`, *Test and live environments*).
