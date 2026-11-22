@@ -288,3 +288,9 @@ test('registration (#114): the page reads the workshop audience and sends it to 
   assert.equal((js.match(/validateRegistration\(readForm\(\), cfg\.ALLOWED_EMAIL_DOMAINS \|\| \[\], audience\(\)\)/g) || []).length, 2);
   assert.match(js, /fillSelect\('organization_type', V\.CHOICES\.ORGANIZATION_TYPE\)/);
 });
+
+test('registration (#102, #114): step 3 checks the laptop question for VSU attendees and attendees from other organizations', () => {
+  const js = read('assets/js/register.js');
+  const step3 = js.slice(js.indexOf('return isOther()'), js.indexOf('function fillSelect'));
+  assert.equal((step3.match(/'laptop_os'/g) || []).length, 2);
+});

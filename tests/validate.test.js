@@ -87,6 +87,7 @@ const guest = () => ({
   college_office: 'Sample Planning Office',
   position: 'Sample Officer II',
   prior_ai_use: 'Tried',
+  laptop_os: 'Windows',
 });
 
 test('vsu_only (#114): unchanged checks, and the same keys are sent as before', () => {
@@ -112,7 +113,7 @@ test('open (#114): an attendee from another organization passes with any valid e
   assert.equal(r.data.faculty_or_staff, '');
   assert.deepEqual(Object.keys(r.data).sort(), [
     'affiliation', 'campus', 'college_office', 'consent', 'email', 'faculty_or_staff', 'full_name',
-    'organization', 'organization_type', 'position', 'prior_ai_use',
+    'laptop_os', 'organization', 'organization_type', 'position', 'prior_ai_use',
   ]);
   assert.match(V.validateRegistration({ ...guest(), email: 'nope' }, [], 'open').errors.email, /example\.com/);
 });
@@ -121,6 +122,8 @@ test('open (#114): organization name and an allowed type are required for other 
   const r = V.validateRegistration({ ...guest(), organization: ' ', organization_type: 'Club', college_office: '', position: '' }, [], 'open');
   assert.deepEqual(Object.keys(r.errors).sort(), ['college_office', 'organization', 'organization_type', 'position']);
   assert.match(r.errors.college_office, /office or unit/);
+  // #102: the laptop question applies to attendees from other organizations too.
+  assert.ok(V.validateRegistration({ ...guest(), laptop_os: '' }, [], 'open').errors.laptop_os);
   for (const t of V.CHOICES.ORGANIZATION_TYPE) assert.equal(V.validateRegistration({ ...guest(), organization_type: t }, [], 'open').ok, true, t);
 });
 
